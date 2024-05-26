@@ -1,4 +1,4 @@
-function recup_tirelir(e, sheet, editedRow, editedColumn) {
+function recupTirelir(skipTrigger, e, sheet, editedRow, editedColumn) {
   if (skipTrigger) return;
 
   var currentDate = new Date();
@@ -10,7 +10,7 @@ function recup_tirelir(e, sheet, editedRow, editedColumn) {
   }
 
   // Vérifiez si l'édition est dans la colonne 'recupere' ou 'perdu'
-  if ((editedColumn == tirelireColumns.recupere && e.value.toLowerCase() == 'true') 
+  if ((editedColumn == tirelireColumns.recupere && e.value.toLowerCase() == 'true')
     || (editedColumn == tirelireColumns.perdu && e.value.toLowerCase() == 'true')) {
 
     rowRange.setBackground('white');
@@ -34,7 +34,7 @@ function recup_tirelir(e, sheet, editedRow, editedColumn) {
       var newRowange = sheet.getRange(newRow, 1, 1, sheet.getLastColumn());
       // Copier la ligne éditée dans la nouvelle ligne
       sheet.getRange(editedRow, 1, 1, sheet.getLastColumn()).copyTo(sheet.getRange(newRow, 1), SpreadsheetApp.CopyPasteType.PASTE_NORMAL, false);
-      
+
       // Init la date de la nouvelle tirelire
       sheet.getRange(newRow, tirelireColumns.date_depot).setValue(formattedDate);
 
