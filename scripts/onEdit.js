@@ -1,38 +1,22 @@
-const frereColumns = {
-  nom: 1,
-  prenom: 2,
-  mail: 3,
-  telephone: 4,
-  admin: 5
-};
-
-const tirelireColumns = {
-  magasin: 1,
-  date_depot: 2,
-  date_retrait: 3,
-  montant: 4,
-  recupere: 5,
-  perdu: 6,
-  responsable: 7
-};
-
 function onEdit(e) {
   var sheet = e.source.getActiveSheet();
   var range = e.range;
-  var editedColumn = range.getColumn();
   var editedRow = range.getRow();
+  var editedColumn = range.getColumn();
   var skipCheck = false;
   var skipTrigger = false;
-
+  
   console.log("Session user: " + e.user);
-  console.log("La cellule " + range.getColumn() + range.getRow() + " de la page " + sheet.getName() + " est en cours d'edition...");
-
+  console.log("La cellule " + range.getColumn() + ":" + range.getRow() + " de la page " + sheet.getName() + " est en cours d'edition...");
+  
   if (sheet.getName() == 'tirelire') {
+    var editablesColumns = sheet.getRange(editedRow, tirelireColumns.magasin, 1, tirelireColumns.perdu);
+
     console.log("editedColumn : " + editedColumn);
     console.log("responsable : " + tirelireColumns.responsable);
     // Check if user has rights to edit
     if (editedColumn === tirelireColumns.responsable) {
-      if (!canEditResponsable(skipCheck, e, range, editedColumn)) {
+      if (!canEditResponsable(skipCheck, e, range, editablesColumns)) {
         return; // Exit if the user is not allowed to edit
       }
     }

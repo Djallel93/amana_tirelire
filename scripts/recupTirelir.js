@@ -10,19 +10,19 @@ function recupTirelir(skipTrigger, e, sheet, editedRow, editedColumn) {
   }
 
   // Vérifiez si l'édition est dans la colonne 'recupere' ou 'perdu'
-  if ((editedColumn == tirelireColumns.recupere && e.value.toLowerCase() == 'true')
-    || (editedColumn == tirelireColumns.perdu && e.value.toLowerCase() == 'true')) {
+  if ((editedColumn == tirelireColumns.recupere && e.value)
+    || (editedColumn == tirelireColumns.perdu && e.value)) {
 
     rowRange.setBackground('white');
     sheet.getRange(editedRow, tirelireColumns.montant).setValue('');
 
     // Vérifiez si l'édition est dans la colonne 'perdu'
-    if (editedColumn == tirelireColumns.perdu && e.value.toLowerCase() == 'true') {
+    if (editedColumn == tirelireColumns.perdu && e.value) {
       // Mettre le montant à 0
       sheet.getRange(editedRow, tirelireColumns.montant).setValue(0);
 
       // Colorier la ligne en rouge
-      rowRange.setBackground('red');
+      rowRange.setBackground('#dd0531');
     }
 
     // Évitez les exécutions multiples en vérifiant si les actions ont déjà été effectuées
