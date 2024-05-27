@@ -1,5 +1,9 @@
 function onEdit(e) {
   // Vérifier si un rollback est en cours
+  console.log(
+    "rollbackInProgress : " +
+      PropertiesService.getScriptProperties().getProperty("rollbackInProgress")
+  );
   if (
     PropertiesService.getScriptProperties().getProperty(
       "rollbackInProgress"
@@ -10,17 +14,11 @@ function onEdit(e) {
       "rollbackInProgress"
     );
     console.log("Rollback en cours...");
-    console.log(
-      "rollbackInProgress" +
-        PropertiesService.getScriptProperties().getProperty(
-          "rollbackInProgress"
-        )
-    );
     return; // Sortie de la fonction pour empêcher la réexécution
   }
 
   var sheet = e.source.getActiveSheet();
-  var currentUser = getUserDetails(
+  var currentUser = getUserDetailsByMail(
     e.user,
     SpreadsheetApp.getActiveSpreadsheet()
       .getSheetByName("frere")
@@ -53,9 +51,6 @@ function onEdit(e) {
       sheet.getName() +
       " est en cours d’édition..."
   );
-
-  console.log("editedColumn : " + e.range.getColumn());
-  console.log("responsable : " + tirelireColumns.responsable);
 
   if (!canEditCells(e, currentUser)) {
     return; // Exit if the user is not allowed to edit
