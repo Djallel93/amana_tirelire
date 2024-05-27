@@ -3,10 +3,12 @@
 const t = {
   user: Session.getActiveUser().getEmail(),
   source: SpreadsheetApp.getActiveSpreadsheet(),
-  range: SpreadsheetApp.getActiveSpreadsheet().getSheetByName('tirelire').getRange('E2'),
-  value: 'TRUE',
-  authMode: "LIMITED"
-}
+  range: SpreadsheetApp.getActiveSpreadsheet()
+    .getSheetByName("tirelire")
+    .getRange("E2"),
+  value: "TRUE",
+  authMode: "LIMITED",
+};
 
 // tirelire récupéré par le mauvais user
 
@@ -17,7 +19,6 @@ const t = {
 //   value: 'TRUE',
 //   authMode: "LIMITED"
 // }
-
 
 // reponsable modifie par le bon user
 

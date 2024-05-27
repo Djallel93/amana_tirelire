@@ -1,53 +1,44 @@
-function canEditResponsable(skipCheck, e, range, editedColumn) {
-  console.log("Verification si le user " + e.user + " possède le droit de modifier le champs responsable...");
-  if (!skipCheck) {
-    var userEmail = e.user;
-    var frereSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('frere');
-    var frereData = frereSheet.getDataRange().getValues();
-    var currentUser = getUserDetails(userEmail, frereData);
+function canEditResponsable(e, currentUser) {
+  console.log(
+    "Vérification si le frère " +
+      e.user +
+      " possède le droit de modifier le champs responsable..."
+  );
 
-    console.log("currentUser : " + JSON.stringify(currentUser));
+  console.log("currentUser : " + JSON.stringify(currentUser));
 
-    if (!currentUser) {
-      console.log("User not found, currentUser is: " + JSON.stringify(currentUser));
-      skipCheck = true;
-      range.setValue(e.oldValue);
-      showAlert("Le frère " + userEmail + " n'existe pas dans la liste des frères. Merci de vous renseigner auprès de votre administrateur.");
-      skipCheck = false;
-      return false;
-    }
-    
-    // If the user is trying to modify the "responsable" column
-    if (editedColumn == tirelireColumns.responsable) {
-      var newResponsable = e.value;
-      var oldResponsable = e.oldValue;
-      var expectedResponsable = currentUser.nom + ' ' + currentUser.prenom;
-      
-      // Allow only admins to change the "responsable" to any value
-      if (!currentUser.admin) {
-        console.log("newResponsable :" + newResponsable);
-        console.log("oldResponsable :" + oldResponsable);
-        console.log("expectedResponsable :" + expectedResponsable);
+  var newResponsable = e.value;
+  var oldResponsable = e.oldValue;
+  var expectedResponsable = currentUser.nom + " " + currentUser.prenom;
 
-        // Allow users to change their own name in "responsable" to another name
-        if (oldResponsable == expectedResponsable) {
-          return true; // Allow the change
-        } else if (newResponsable == expectedResponsable) {
-          // Prevent users from assigning themselves unless they are already responsible
-          skipCheck = true;
-          range.setValue(e.oldValue);
-          showAlert('Vous ne pouvez pas vous attribuer cette ligne.');
-          skipCheck = false;
-          return false;
-        } else {
-          // Prevent changing to another user's name if not admin
-          skipCheck = true;
-          range.setValue(e.oldValue);
-          showAlert('Vous ne pouvez pas modifier cette ligne.');
-          skipCheck = false;
-          return false;
-        }
-      }
-    }
+  console.log("newResponsable :" + newResponsable);
+  console.log("oldResponsable :" + oldResponsable);
+  console.log("expectedResponsable :" + expectedResponsable);
+
+  // Un frère peut réattribuer sa tirelire a un autre frère
+  if (oldResponsable == expectedResponsable) {
+    console.log(
+      "Le frère " +
+        e.user +
+        " possède le droit de modifier le champs responsable..."
+    );
+    return true;
+  } else if (newResponsable == expectedResponsable) {
+    // Un frère ne peut pas s'attribuer la tirelire d'un autre
+    noRollbackSetValue(e.range, e.oldValue);
+    showAlert("Vous ne pouvez pas vous attribuer cette tirelire.");
+    return false;
+  } else if (oldResponsable != expectedResponsable) {
+    // Un frère ne peut pas réattribuer les tirelires des autres
+    noRollbackSetValue(e.range, e.oldValue);
+    showAlert("Vous ne pouvez pas modifier cette tirelire.");
+    return false;
   }
+
+  console.log(
+    "Le frère " +
+      e.user +
+      " possède le droit de modifier le champs responsable..."
+  );
+  return true;
 }
