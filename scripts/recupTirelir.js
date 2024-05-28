@@ -77,34 +77,8 @@ function recupTirelir(e) {
 
       newRowRange.setBackground("white");
 
-      // Creation de l’événement sur le calendrier
-      var currMagasin = getMagasinDetails(
-        sheet.getRange(editedRow, tirelireColumns.magasin).getValue(),
-        SpreadsheetApp.getActiveSpreadsheet()
-          .getSheetByName("magasin")
-          .getDataRange()
-          .getValues()
-      );
-
-      var currResponsable = getUserDetailsByName(
-        sheet.getRange(editedRow, tirelireColumns.responsable).getValue(),
-        SpreadsheetApp.getActiveSpreadsheet()
-          .getSheetByName("frere")
-          .getDataRange()
-          .getValues()
-      );
-
-      var deadline = new Date();
-      deadline.setDate(currentDate.getDate() + currMagasin.delaisRecuperation);
-      console.log("La deadline pour recupere la tirelire est le " + deadline);
-
-      if (!currMagasin) {
-        showAlert("Impossible de récupérer les informations du magasin");
-      } else if (!currResponsable) {
-        showAlert("Impossible de récupérer les informations du responsable");
-      } else {
-        createCalendarEvent(currMagasin, deadline, currResponsable.email);
-      }
+      // Creation de l'événement sur le calendrier
+      createCalendarEvent(e);
     }
   }
 }

@@ -13,7 +13,8 @@ const magasinColumns = {
     codePostal: 4,
     ville: 5,
     type: 6,
-    telephone: 7
+    delaisRecuperation: 7,
+    telephone: 8
 };
 
 const tirelireColumns = {
@@ -23,5 +24,6 @@ const tirelireColumns = {
     montant: 4,
     recupere: 5,
     perdu: 6,
-    responsable: 7
+    responsable: 7,
+    id_event: 8
 };

@@ -1,50 +1,68 @@
-// function createCalendarEvent(magasin, date, email) {
-//   var calendar = CalendarApp.getDefaultCalendar();
+function createCalendarEvent(e) {
+  var sheet = e.source.getActiveSheet();
+  var editedRow = e.range.getRow();
 
-//   var magasin = getMagasinDetails(
-//     'M1',
-//     SpreadsheetApp.getActiveSpreadsheet()
-//       .getSheetByName("magasin")
-//       .getDataRange()
-//       .getValues()
-//   );
-  
-//   var email = "bigdjallel@gmail.com";
-//   var date = new Date();
-
-//   var title = "Récupérer la tirelire"; // Titre de l'événement
-//   var options = {
-//     description: "Merci de récupérer la tirelire chez " + magasin.nom,
-//     location:
-//       magasin.adresse + ", " + magasin.codePostal + ", " + magasin.ville,
-//     guests: email,
-//   };
-
-//   var event = calendar.createAllDayEvent(title, date, options);
-//   event
-//     .addPopupReminder(1440) // Un jour avant
-//     .addPopupReminder(4320)// Trois jour avant
-//     .addPopupReminder(10080)// Une semaine avant;
-// }
-
-function createCalendarEvent(magasin, date, email) {
   console.log("Récupération de l'ID du calendrier de l'utilisateur");
   var calendar = CalendarApp.getDefaultCalendar();
-  
+
+  var currMagasin = getMagasinDetails(
+    sheet.getRange(editedRow, tirelireColumns.magasin).getValue(),
+    SpreadsheetApp.getActiveSpreadsheet()
+      .getSheetByName("magasin")
+      .getDataRange()
+      .getValues()
+  );
+
+  var currResponsable = getUserDetailsByName(
+    sheet.getRange(editedRow, tirelireColumns.responsable).getValue(),
+    SpreadsheetApp.getActiveSpreadsheet()
+      .getSheetByName("frere")
+      .getDataRange()
+      .getValues()
+  );
+
+  if (!currMagasin) {
+    showAlert("Impossible de récupérer les informations du magasin");
+    return;
+  }
+  if (!currResponsable) {
+    showAlert("Impossible de récupérer les informations du responsable de cette tirelire");
+    return;
+  }
+
+  var deadline = new Date();
+  deadline.setDate(deadline.getDate() + parseInt(currMagasin.delaisRecuperation));
+  console.log("La deadline pour recupere la tirelire est le " + deadline);
+
   var title = "Récupérer la tirelire"; // Titre de l'événement
   var options = {
-    description: "Merci de récupérer la tirelire chez " + magasin.nom,
+    description: "Merci de récupérer la tirelire chez " + currMagasin.nom,
     location:
-    magasin.adresse + ", " + magasin.codePostal + ", " + magasin.ville,
-    guests: email,
+      currMagasin.adresse + ", " + currMagasin.codePostal + ", " + currMagasin.ville,
+    guests: currResponsable.email,
   };
-  
-  console.log("Création de l’événement en cours...");
-  var event = calendar.createAllDayEvent(title, date, options);
 
-  console.log("Ajout des rappels...");
-  event
-    .addPopupReminder(1440) // Un jour avant
-    .addPopupReminder(2880)// Trois jour avant
-    .addPopupReminder(8640)// Une semaine avant;
+  console.log("Création de l'événement en cours...");
+  try {
+    var event = calendar.createAllDayEvent(title, deadline, options);
+    event
+      .addPopupReminder(1440) // Un jour avant
+      .addPopupReminder(2880) // Trois jour avant
+      .addPopupReminder(8640) // Une semaine avant;
+      .setColor(CalendarApp.EventColor.RED);
+
+    Logger.log("Event ID: " + event.getId());
+  } catch (error) {
+    Logger.log("Error: " + error.toString());
+    return;
+  }
+
+  if (!event) {
+    showAlert("Impossible de créer l'événement sur le calendrier");
+  } else {
+    noRollbackSetValue(
+      sheet.getRange(editedRow, tirelireColumns.id_event),
+      event.getId()
+    );
+  }
 }

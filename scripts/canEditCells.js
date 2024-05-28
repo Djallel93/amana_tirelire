@@ -33,6 +33,7 @@ function canEditCells(e, currentUser) {
       if (responsable === expectedResponsable) {
         return true;
       } else {
+        noRollbackSetValue(e.range, e.oldValue);
         showAlert(
           "Vous n'êtes pas autorisé à modifier cette tirelire car vous n'en êtes pas responsable."
         );
