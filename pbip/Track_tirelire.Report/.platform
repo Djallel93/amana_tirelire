@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Track_tirelire"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "68d7edda-e3f0-46de-b62a-7d89a1ce20cf"
+  }
+}

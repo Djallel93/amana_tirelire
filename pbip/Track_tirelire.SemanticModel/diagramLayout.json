@@ -1,0 +1,73 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 48.400001525878906
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 378,
+            "y": 351
+          },
+          "nodeIndex": "tirelire",
+          "nodeLineageTag": "bfd2e895-db9b-44b8-a183-12092544893b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 240
+          },
+          "nodeIndex": "magasins",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 246,
+            "y": 60
+          },
+          "nodeIndex": "refresh",
+          "nodeLineageTag": "c8a81f42-f163-4022-9445-af64f917102a",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 736,
+            "y": 122
+          },
+          "nodeIndex": "frere",
+          "nodeLineageTag": "42e292df-d40f-4604-8b97-a696d8a7a179",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}
