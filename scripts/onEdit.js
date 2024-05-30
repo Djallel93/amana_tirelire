@@ -13,10 +13,11 @@ function onEdit(e) {
     PropertiesService.getScriptProperties().deleteProperty(
       "rollbackInProgress"
     );
-    console.log("Rollback en cours...");
+    console.log("une édition est déjà en cours en cours...");
     return; // Sortie de la fonction pour empêcher la réexécution
   }
 
+  var calendar = CalendarApp.getDefaultCalendar();
   var sheet = e.source.getActiveSheet();
   var currentUser = getUserDetailsByMail(
     e.user,
@@ -58,6 +59,6 @@ function onEdit(e) {
 
   // Call the function to handle "recupere" and "perdu" logic
   if (sheet.getName() == "tirelire") {
-    recupTirelir(e);
+    getTirelir(e, calendar);
   }
 }

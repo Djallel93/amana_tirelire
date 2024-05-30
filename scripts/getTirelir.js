@@ -1,4 +1,4 @@
-function recupTirelir(e) {
+function getTirelir(e, calendar) {
   var sheet = e.source.getActiveSheet();
   var editedRow = e.range.getRow();
   var editedColumn = e.range.getColumn();
@@ -6,33 +6,33 @@ function recupTirelir(e) {
   var rowRange = sheet.getRange(editedRow, 1, 1, sheet.getLastColumn());
 
   if (
-    editedColumn == tirelireColumns.recupere ||
-    editedColumn == tirelireColumns.perdu
+    editedColumn == TIRELIRE_COLUMNS.RECUPERE ||
+    editedColumn == TIRELIRE_COLUMNS.PERDU
   ) {
     exclusiveSelect(
       sheet,
       editedRow,
       editedColumn,
-      tirelireColumns.recupere,
-      tirelireColumns.perdu
+      TIRELIRE_COLUMNS.RECUPERE,
+      TIRELIRE_COLUMNS.PERDU
     );
   }
 
   // Vérifiez si l'édition est dans la colonne 'recupere' ou 'perdu'
   if (
-    (editedColumn == tirelireColumns.recupere &&
+    (editedColumn == TIRELIRE_COLUMNS.RECUPERE &&
       e.value.toLowerCase() === "true") ||
-    (editedColumn == tirelireColumns.perdu && e.value.toLowerCase() === "true")
+    (editedColumn == TIRELIRE_COLUMNS.PERDU && e.value.toLowerCase() === "true")
   ) {
     rowRange.setBackground("white");
-    noRollbackSetValue(sheet.getRange(editedRow, tirelireColumns.montant), "");
+    noRollbackSetValue(sheet.getRange(editedRow, TIRELIRE_COLUMNS.MONTANT), "");
     // Vérifiez si l'édition est dans la colonne 'perdu'
     if (
-      editedColumn == tirelireColumns.perdu &&
+      editedColumn == TIRELIRE_COLUMNS.PERDU &&
       e.value.toLowerCase() === "true"
     ) {
       // Mettre le montant à 0
-      noRollbackSetValue(sheet.getRange(editedRow, tirelireColumns.montant), 0);
+      noRollbackSetValue(sheet.getRange(editedRow, TIRELIRE_COLUMNS.MONTANT), 0);
 
       // Colorier la ligne en rouge
       rowRange.setBackground("#dd0531");
@@ -40,11 +40,11 @@ function recupTirelir(e) {
 
     // Évitez les exécutions multiples en vérifiant si les actions ont déjà été effectuées
     if (
-      sheet.getRange(editedRow, tirelireColumns.date_retrait).getValue() == ""
+      sheet.getRange(editedRow, TIRELIRE_COLUMNS.DATE_RETRAIT).getValue() == ""
     ) {
       // Met à jour la date_retrait avec la date d'aujourd'hui au format 'yyyy-MM-dd'
       noRollbackSetValue(
-        sheet.getRange(editedRow, tirelireColumns.date_retrait),
+        sheet.getRange(editedRow, TIRELIRE_COLUMNS.DATE_RETRAIT),
         currentDate
       );
 
@@ -62,23 +62,23 @@ function recupTirelir(e) {
 
       // Init la date de la nouvelle tirelire
       noRollbackSetValue(
-        sheet.getRange(newRow, tirelireColumns.date_depot),
+        sheet.getRange(newRow, TIRELIRE_COLUMNS.DATE_DEPOT),
         currentDate
       );
 
       // Vider les colonnes 'montant', 'recupere' et 'perdu' de la nouvelle ligne
       noRollbackSetValue(
-        sheet.getRange(newRow, tirelireColumns.date_retrait),
+        sheet.getRange(newRow, TIRELIRE_COLUMNS.DATE_RETRAIT),
         ""
       );
-      noRollbackSetValue(sheet.getRange(newRow, tirelireColumns.montant), "");
-      noRollbackSetValue(sheet.getRange(newRow, tirelireColumns.recupere), "");
-      noRollbackSetValue(sheet.getRange(newRow, tirelireColumns.perdu), "");
+      noRollbackSetValue(sheet.getRange(newRow, TIRELIRE_COLUMNS.MONTANT), "");
+      noRollbackSetValue(sheet.getRange(newRow, TIRELIRE_COLUMNS.RECUPERE), "");
+      noRollbackSetValue(sheet.getRange(newRow, TIRELIRE_COLUMNS.PERDU), "");
 
       newRowRange.setBackground("white");
 
       // Creation de l'événement sur le calendrier
-      createCalendarEvent(e);
+      var event = createCalendarEvent(e, calendar);
     }
   }
 }

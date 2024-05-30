@@ -20,12 +20,12 @@ function canEditCells(e, currentUser) {
   // Tous les administrateur peuvent modifier n'importe quel responsable
   if (currentUser.role.toLowerCase() != "administrateur") {
     if (sheet.getName() == "tirelire") {
-      if (editedColumn == tirelireColumns.responsable) {
+      if (editedColumn == TIRELIRE_COLUMNS.RESPONSABLE) {
         return canEditResponsable(e, currentUser);
       }
 
       var responsable = sheet
-        .getRange(editedRow, tirelireColumns.responsable)
+        .getRange(editedRow, TIRELIRE_COLUMNS.RESPONSABLE)
         .getValue();
 
       var expectedResponsable = currentUser.nom + " " + currentUser.prenom;

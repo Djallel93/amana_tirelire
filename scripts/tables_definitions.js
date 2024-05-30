@@ -1,29 +1,29 @@
-const frereColumns = {
-    nom: 1,
-    prenom: 2,
-    mail: 3,
-    telephone: 4,
-    admin: 5
+const FRERE_COLUMNS = {
+    NOM: 1,
+    PRENOM: 2,
+    MAIL: 3,
+    TELEPHONE: 4,
+    ADMIN: 5
 };
 
-const magasinColumns = {
-    nom: 1,
-    adresse: 2,
-    quartier: 3,
-    codePostal: 4,
-    ville: 5,
-    type: 6,
-    delaisRecuperation: 7,
-    telephone: 8
+const MAGASIN_COLUMNS = {
+    NOM: 1,
+    ADRESSE: 2,
+    QUARTIER: 3,
+    CODEPOSTAL: 4,
+    VILLE: 5,
+    TYPE: 6,
+    DELAISRECUPERATION: 7,
+    TELEPHONE: 8
 };
 
-const tirelireColumns = {
-    magasin: 1,
-    date_depot: 2,
-    date_retrait: 3,
-    montant: 4,
-    recupere: 5,
-    perdu: 6,
-    responsable: 7,
-    id_event: 8
+const TIRELIRE_COLUMNS = {
+    MAGASIN: 1,
+    DATE_DEPOT: 2,
+    DATE_RETRAIT: 3,
+    MONTANT: 4,
+    RECUPERE: 5,
+    PERDU: 6,
+    RESPONSABLE: 7,
+    ID_EVENT: 8
 };
