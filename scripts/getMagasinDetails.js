@@ -8,6 +8,7 @@ function getMagasinDetails(nom, magasinData) {
         codePostal: magasinData[i][3],
         ville: magasinData[i][4],
         delaisRecuperation: magasinData[i][6],
+        telephone: magasinData[i][7],
       };
     }
   }
