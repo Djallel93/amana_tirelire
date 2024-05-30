@@ -32,7 +32,10 @@ function getTirelire(e, calendar) {
       e.value.toLowerCase() === "true"
     ) {
       // Mettre le montant à 0
-      noRollbackSetValue(sheet.getRange(editedRow, TIRELIRE_COLUMNS.MONTANT), 0);
+      noRollbackSetValue(
+        sheet.getRange(editedRow, TIRELIRE_COLUMNS.MONTANT),
+        0
+      );
 
       // Colorier la ligne en rouge
       rowRange.setBackground("#dd0531");

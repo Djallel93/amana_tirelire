@@ -25,10 +25,10 @@ function getUserDetailsByName(fullName, frereData) {
                 "Le frère " + fullName + " existe dans la liste des utilisateurs"
             );
             return {
-                nom: frereData[i][0],
-                prenom: frereData[i][1],
-                email: frereData[i][2],
-                role: frereData[i][4]
+                nom: frereData[i][FRERE_COLUMNS.NOM - 1],
+                prenom: frereData[i][FRERE_COLUMNS.PRENOM - 1],
+                email: frereData[i][FRERE_COLUMNS.MAIL - 1],
+                role: frereData[i][FRERE_COLUMNS.ROLE - 1]
             };
         }
     }

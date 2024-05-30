@@ -3,12 +3,12 @@ function getMagasinDetails(nom, magasinData) {
     if (magasinData[i][0] == nom) {
       console.log("Le magasin " + nom + " existe dans la feuille magasin");
       return {
-        nom: magasinData[i][0],
-        adresse: magasinData[i][1],
-        codePostal: magasinData[i][3],
-        ville: magasinData[i][4],
-        delaisRecuperation: magasinData[i][6],
-        telephone: magasinData[i][7],
+        nom: magasinData[i][MAGASIN_COLUMNS.NOM - 1],
+        adresse: magasinData[i][MAGASIN_COLUMNS.ADRESSE - 1],
+        codePostal: magasinData[i][MAGASIN_COLUMNS.CODE_POSTAL - 1],
+        ville: magasinData[i][MAGASIN_COLUMNS.VILLE - 1],
+        delaisRecuperation: magasinData[i][MAGASIN_COLUMNS.DELAISRECUPERATION - 1],
+        telephone: magasinData[i][MAGASIN_COLUMNS.TELEPHONE - 1],
       };
     }
   }

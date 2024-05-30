@@ -57,6 +57,9 @@ function onEdit(e) {
     return; // Exit if the user is not allowed to edit
   }
 
+  if (sheet.getName() == "Réponses au formulaire") {
+    getFormsResponse(e);
+  }
   // Call the function to handle "recupere" and "perdu" logic
   if (sheet.getName() == "tirelire") {
     getTirelire(e, calendar);
