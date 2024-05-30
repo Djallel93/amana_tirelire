@@ -1,4 +1,4 @@
-function getTirelir(e, calendar) {
+function getTirelire(e, calendar) {
   var sheet = e.source.getActiveSheet();
   var editedRow = e.range.getRow();
   var editedColumn = e.range.getColumn();

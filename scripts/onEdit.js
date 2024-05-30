@@ -59,6 +59,6 @@ function onEdit(e) {
 
   // Call the function to handle "recupere" and "perdu" logic
   if (sheet.getName() == "tirelire") {
-    getTirelir(e, calendar);
+    getTirelire(e, calendar);
   }
 }
