@@ -1,7 +1,7 @@
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   // Or DocumentApp, SlidesApp or FormApp.
-  ui.createMenu("Fonction Personnalisées")
+  ui.createMenu("Fonctions Personnalisées")
     .addItem("Initialisation des événement", "initCalendarEvents")
     // .addSeparator()
     // .addSubMenu(ui.createMenu('Sub-menu')
@@ -21,7 +21,11 @@ function initCalendarEvents() {
       .getRange(row, TIRELIRE_COLUMNS.DATE_RETRAIT)
       .getValue();
 
-    if (dateRetrait) {
+    var idEvent = sheet
+      .getRange(row, TIRELIRE_COLUMNS.ID_EVENT)
+      .getValue();
+
+    if (dateRetrait || idEvent) {
       continue;
     }
 

@@ -1,7 +1,4 @@
-function createCalendarEvent(e, calendar) {
-  var sheet = e.source.getActiveSheet();
-  var editedRow = e.range.getRow();
-
+function createCalendarEvent(sheet, editedRow, calendar, deadline) {
   var currMagasin = getMagasinDetails(
     sheet.getRange(editedRow, TIRELIRE_COLUMNS.MAGASIN).getValue(),
     SpreadsheetApp.getActiveSpreadsheet()
@@ -29,10 +26,12 @@ function createCalendarEvent(e, calendar) {
     return null;
   }
 
-  var deadline = new Date();
-  deadline.setDate(
-    deadline.getDate() + parseInt(currMagasin.delaisRecuperation)
-  );
+  if (!deadline) {
+    var deadline = new Date();
+    deadline.setDate(
+      deadline.getDate() + parseInt(currMagasin.delaisRecuperation)
+    );
+  }
   console.log(
     "La deadline pour recupere la tirelire du magasin " +
       currMagasin.nom +
@@ -82,10 +81,6 @@ function createCalendarEvent(e, calendar) {
     showAlert("Impossible de créer l'événement sur le calendrier");
     return null;
   } else {
-    noRollbackSetValue(
-      sheet.getRange(editedRow, TIRELIRE_COLUMNS.ID_EVENT),
-      event.getId()
-    );
     return event;
   }
 }

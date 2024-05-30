@@ -28,16 +28,16 @@ const TIRELIRE_COLUMNS = {
     ID_EVENT: 8
 };
 
-const REPONSES_FORMULAIRE = {
-    HORODATEUR: 1,
-    RECUPEREE: 2,
-    PERDUE_VOLEE: 3,
-    REPROGRAMMER: 4,
-    TRANSFERER: 5,
-    LISTE_FRERES: 6,
-    DATE_REPROGRAMMATION: 7,
-    CONTENU_CONNU: 8,
-    MONTANT_RECUPERE: 9,
-    EMAIL: 10,
-    ID_EVENEMENT: 11
+const QUESTIONS_FORMULAIRE = {
+    HORODATEUR: "Horodateur",
+    RECUPEREE: "Avez vous réussi a récupérer la tirelire",
+    PERDUE_VOLEE: "La tirelire a-t-elle était perdue/volée ?",
+    REPROGRAMMER: "Souhaitez vous reprogrammer la récupération de votre tirelire ?",
+    TRANSFERER: "Souhaitez vous transférer la tirelire a un autre frère ?",
+    FRERE_SELECTIONNE: "Voici la liste des frères disponibles",
+    DATE_REPROGRAMMATION: "Pour quand voulez vous reprogrammer votre passage ?",
+    CONTENU_CONNU: "Savez vous combien contenait la tirelire ?",
+    MONTANT_RECUPERE: "Veuillez saisir le montant récupéré",
+    EMAIL: "Adresse e-mail",
+    ID_EVENEMENT: "Quel est l'ID de l'évènement sur Google Calendar ?",
 };

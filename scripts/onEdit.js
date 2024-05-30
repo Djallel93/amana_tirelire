@@ -57,11 +57,11 @@ function onEdit(e) {
     return; // Exit if the user is not allowed to edit
   }
 
-  if (sheet.getName() == "Réponses au formulaire") {
-    getFormsResponse(e);
-  }
   // Call the function to handle "recupere" and "perdu" logic
-  if (sheet.getName() == "tirelire") {
-    getTirelire(e, calendar);
+  if (sheet.getName() == "tirelire" && e.range.getRow() > 1) {
+    var editedRow = e.range.getRow();
+    var editedColumn = e.range.getColumn();
+
+    getTirelire(sheet, editedRow, editedColumn, calendar);
   }
 }
