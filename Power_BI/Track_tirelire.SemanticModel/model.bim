@@ -12,7 +12,7 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.129.905.0 (24.05)"
+        "value": "2.129.1229.0 (24.05)"
       },
       {
         "name": "PBI_ProTooling",
@@ -288,10 +288,6 @@
       {
         "name": "refresh",
         "annotations": [
-          {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
-          },
           {
             "name": "PBI_ResultType",
             "value": "Table"
@@ -574,12 +570,12 @@
         "name": "frere",
         "annotations": [
           {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
-          },
-          {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -644,19 +640,6 @@
             "type": "calculated"
           },
           {
-            "name": "telephone",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ],
-            "dataType": "string",
-            "lineageTag": "3e61c691-4c7f-4c8a-aa97-144bedbf2e32",
-            "sourceColumn": "telephone",
-            "summarizeBy": "none"
-          },
-          {
             "name": "groupe",
             "annotations": [
               {
@@ -667,6 +650,19 @@
             "dataType": "string",
             "lineageTag": "4128b138-f492-4b45-9e9d-64c5c2ffce47",
             "sourceColumn": "groupe",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "telephone",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "f85c80fd-bce9-42e7-84bd-33eca14f1401",
+            "sourceColumn": "telephone",
             "summarizeBy": "none"
           }
         ],
@@ -681,10 +677,13 @@
                 "    Source = GoogleSheets.Contents(\"https://docs.google.com/spreadsheets/d/12vU-UwntsirFpH03dfijqU7SZ2VSaWiqXRCzGl0Fc5E/edit?usp=drive_link\"),",
                 "    frere_Table = Source{[name=\"frere\",ItemKind=\"Table\"]}[Data],",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(frere_Table, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"nom\", type text}, {\"prenom\", type text}, {\"mail\", type text}, {\"telephone\", type text}}),",
-                "    #\"Filtered Rows\" = Table.SelectRows(#\"Changed Type\", each [nom] <> null and [nom] <> \"\")",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"nom\", type text}, {\"prenom\", type text}, {\"mail\", type text}, {\"telephone\", type text}, {\"groupe\", type text}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Changed Type\", each [nom] <> null and [nom] <> \"\"),",
+                "    #\"Added Custom Column\" = Table.AddColumn(#\"Filtered Rows\", \"Custom\", each Text.Combine({\"+33 (0) \", Text.Start([telephone], 1), \" \", Text.Middle([telephone], 1, 2), \" \", Text.Middle([telephone], 3, 2), \" \", Text.Middle([telephone], 5, 2), \" \", Text.Middle([telephone], 7)}), type text),",
+                "    #\"Removed Columns\" = Table.RemoveColumns(#\"Added Custom Column\",{\"telephone\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Columns\",{{\"Custom\", \"telephone\"}})",
                 "in",
-                "    #\"Filtered Rows\""
+                "    #\"Renamed Columns\""
               ],
               "type": "m"
             }
@@ -695,12 +694,12 @@
         "name": "magasins",
         "annotations": [
           {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
-          },
-          {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -773,19 +772,6 @@
             "summarizeBy": "none"
           },
           {
-            "name": "telephone",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ],
-            "dataType": "string",
-            "lineageTag": "e50c6e01-861b-437c-aa49-a4fd353df4e7",
-            "sourceColumn": "telephone",
-            "summarizeBy": "none"
-          },
-          {
             "name": "delais recuperation",
             "annotations": [
               {
@@ -797,6 +783,19 @@
             "formatString": "0",
             "lineageTag": "dbc7832c-fb8d-4781-8ada-92c751d069e2",
             "sourceColumn": "delais recuperation",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "telephone",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "f7c95c08-edf9-4204-82c4-3355bc76f1e5",
+            "sourceColumn": "telephone",
             "summarizeBy": "none"
           }
         ],
@@ -815,9 +814,12 @@
                 "    #\"Inserted Merged Column\" = Table.AddColumn(#\"Changed Type\", \"Merged\", each Text.Combine({[ville], \", \", Text.From([code postal], \"fr-FR\"), \", France\"}), type text),",
                 "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Inserted Merged Column\",{\"nom\", \"adresse\", \"quartier\", \"type\", \"delais recuperation\", \"telephone\", \"Merged\"}),",
                 "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Other Columns\",{{\"Merged\", \"ville\"}}),",
-                "    #\"Filtered Rows\" = Table.SelectRows(#\"Renamed Columns\", each [nom] <> null and [nom] <> \"\")",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Renamed Columns\", each [nom] <> null and [nom] <> \"\"),",
+                "    #\"Added Custom Column\" = Table.AddColumn(#\"Filtered Rows\", \"Custom\", each Text.Combine({\"+\", Text.Middle([telephone], 6, 1), Text.Middle([telephone], 6, 1), \" (\", Text.Middle([ville], 19, 1), \") \", Text.Start([telephone], 1), \" \", Text.Middle([telephone], 1, 2), \" \", Text.Middle([telephone], 3, 2), \" \", Text.Middle([telephone], 5, 2), \" \", Text.Middle([telephone], 7)}), type text),",
+                "    #\"Removed Columns\" = Table.RemoveColumns(#\"Added Custom Column\",{\"telephone\"}),",
+                "    #\"Renamed Columns1\" = Table.RenameColumns(#\"Removed Columns\",{{\"Custom\", \"telephone\"}})",
                 "in",
-                "    #\"Filtered Rows\""
+                "    #\"Renamed Columns1\""
               ],
               "type": "m"
             }
@@ -827,10 +829,6 @@
       {
         "name": "tirelire",
         "annotations": [
-          {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
-          },
           {
             "name": "PBI_ResultType",
             "value": "Table"
