@@ -58,6 +58,13 @@ function onEdit(e) {
   }
 
   // Call the function to handle "recupere" and "perdu" logic
+  if (sheet.getName() == "frere" && e.range.getRow() > 1) {
+    var editedRow = e.range.getRow();
+    var editedColumn = e.range.getColumn();
+    updateListeFrere(sheet, editedRow, editedColumn);
+  }
+
+  // Call the function to handle "recupere" and "perdu" logic
   if (sheet.getName() == "tirelire" && e.range.getRow() > 1) {
     var editedRow = e.range.getRow();
     var editedColumn = e.range.getColumn();

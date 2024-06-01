@@ -1,6 +1,6 @@
 function getMagasinDetails(nom, magasinData) {
   for (var i = 1; i < magasinData.length; i++) {
-    if (magasinData[i][0] == nom) {
+    if (magasinData[i][MAGASIN_COLUMNS.NOM - 1] == nom) {
       console.log("Le magasin " + nom + " existe dans la feuille magasin");
       return {
         nom: magasinData[i][MAGASIN_COLUMNS.NOM - 1],

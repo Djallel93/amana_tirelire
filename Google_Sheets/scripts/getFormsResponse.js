@@ -25,7 +25,7 @@ function getFormsResponse(e) {
     for (var i = 1; i < tirelireData.length; i++) {
       if (tirelireData[i][TIRELIRE_COLUMNS.DATE_RETRAIT - 1] === "") {
         if (tirelireData[i][TIRELIRE_COLUMNS.ID_EVENT - 1] === id_event) {
-          console.log("L'événement a été trouvé. Mise a jour des données...");
+          console.log("L'événement a été trouvé. Mise à jour des données...");
           tirelireSheet
             .getRange(i + 1, TIRELIRE_COLUMNS.RECUPERE)
             .setValue(true);
@@ -51,7 +51,7 @@ function getFormsResponse(e) {
       for (var i = 1; i < tirelireData.length; i++) {
         if (tirelireData[i][TIRELIRE_COLUMNS.DATE_RETRAIT - 1] === "") {
           if (tirelireData[i][TIRELIRE_COLUMNS.ID_EVENT - 1] === id_event) {
-            console.log("L'événement a été trouvé. Mise a jour des données...");
+            console.log("L'événement a été trouvé. Mise à jour des données...");
             tirelireSheet
               .getRange(i + 1, TIRELIRE_COLUMNS.PERDU)
               .setValue(true);
@@ -94,7 +94,7 @@ function getFormsResponse(e) {
           console.log(
             "Événement crée avec succès a la date du " +
               newDeadline +
-              ". Mise a jour de la nouvelle ligne..."
+              ". Mise à jour de la nouvelle ligne..."
           );
           noRollbackSetValue(
             tirelireSheet.getRange(i + 1, TIRELIRE_COLUMNS.ID_EVENT),
@@ -133,7 +133,7 @@ function getFormsResponse(e) {
             newDeadline
           );
           console.log(
-            "Événement crée avec succès. Mise a jour de la nouvelle ligne..."
+            "Événement crée avec succès. Mise à jour de la nouvelle ligne..."
           );
           noRollbackSetValue(
             tirelireSheet.getRange(i + 1, TIRELIRE_COLUMNS.ID_EVENT),

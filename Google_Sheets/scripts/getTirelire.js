@@ -79,7 +79,7 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
       // Creation de l'événement sur le calendrier
       var event = createCalendarEvent(sheet, editedRow, calendar);
       console.log(
-        "Événement crée avec succès. Mise a jour de la nouvelle ligne : " +
+        "Événement crée avec succès. Mise à jour de la nouvelle ligne : " +
           newRow
       );
       noRollbackSetValue(
