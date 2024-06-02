@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centre Link</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: rgba(6, 203, 164, 0.822);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="message">Cliquez sur le bouton ci-dessous du formulaire préremplie :</div>
+    <button onclick="openLink('<?= url ?>')">
+        <?= name ?>
+    </button>
+    <script>
+        function openLink(url) {
+            window.open(url, "_blank");
+            google.script.host.close();
+        }
+    </script>
+</body>
+
+</html>

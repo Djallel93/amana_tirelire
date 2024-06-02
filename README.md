@@ -17,6 +17,8 @@ sudo apt update
 sudo apt upgrade
 sudo apt install npm
 sudo npm install -g @google/clasp
+# Google App Script Snippet
+npm i -D @types/google-apps-script
 ```
 
 Il faut ensuite activer le [Google Apps Script API](https://script.google.com/home/usersettings)
