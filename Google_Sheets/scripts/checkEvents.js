@@ -1,27 +1,30 @@
 function checkEvents() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("tirelire");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
+    TIRELIRE_DEF.SHEET_NAME
+  );
   var lastRow = sheet.getLastRow();
+
+  var formUrl = SpreadsheetApp.getActiveSpreadsheet().getFormUrl();
+  var formID = FormApp.openByUrl(formUrl).getId();
 
   console.log("verification de la présence d'événements");
 
   for (var row = 2; row <= lastRow; row++) {
-    var eventId = sheet.getRange(row, TIRELIRE_COLUMNS.ID_EVENT).getValue();
-    var dateRetrait = sheet
-      .getRange(row, TIRELIRE_COLUMNS.DATE_RETRAIT)
-      .getValue();
+    var eventId = sheet.getRange(row, TIRELIRE_DEF.ID_EVENT).getValue();
+    var dateRetrait = sheet.getRange(row, TIRELIRE_DEF.DATE_RETRAIT).getValue();
 
     var currMagasin = getMagasinDetails(
-      sheet.getRange(row, TIRELIRE_COLUMNS.MAGASIN).getValue(),
+      sheet.getRange(row, TIRELIRE_DEF.MAGASIN).getValue(),
       SpreadsheetApp.getActiveSpreadsheet()
-        .getSheetByName("magasin")
+        .getSheetByName(MAGASIN_DEF.SHEET_NAME)
         .getDataRange()
         .getValues()
     );
 
     var currResponsable = getUserDetailsByName(
-      sheet.getRange(row, TIRELIRE_COLUMNS.RESPONSABLE).getValue(),
+      sheet.getRange(row, TIRELIRE_DEF.RESPONSABLE).getValue(),
       SpreadsheetApp.getActiveSpreadsheet()
-        .getSheetByName("frere")
+        .getSheetByName(FRERE_DEF.SHEET_NAME)
         .getDataRange()
         .getValues()
     );
@@ -40,9 +43,7 @@ function checkEvents() {
     }
 
     if (eventId && !dateRetrait) {
-      var dateDepot = sheet
-        .getRange(row, TIRELIRE_COLUMNS.DATE_DEPOT)
-        .getValue();
+      var dateDepot = sheet.getRange(row, TIRELIRE_DEF.DATE_DEPOT).getValue();
 
       var dateRetraitTheo = new Date(dateDepot);
       dateRetraitTheo.setDate(
@@ -71,7 +72,9 @@ function checkEvents() {
                 currResponsable.prenom
             );
             var formUrl =
-              "https://docs.google.com/forms/d/e/1FAIpQLSfBemjBOj8D9AO9XtODIzYxw0ItWQPTN5wv3dfyG1eORThDIg/viewform?usp=pp_url&entry.2052962151=" +
+              "https://docs.google.com/forms/d/e/" +
+              formID +
+              "/viewform?usp=pp_url&entry.2052962151=" +
               eventId;
             var subject = "Tirelire du magasin " + currMagasin.nom;
             var body =
@@ -90,7 +93,9 @@ function checkEvents() {
             console.log("No event found with the given ID.");
           }
         } catch (error) {
-          console.log("Échec de la récupération du calendrier: " + error.toString());
+          console.log(
+            "Échec de la récupération du calendrier: " + error.toString()
+          );
         }
       }
     }

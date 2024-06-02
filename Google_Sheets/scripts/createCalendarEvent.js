@@ -1,26 +1,26 @@
 function createCalendarEvent(sheet, editedRow, calendar, deadline) {
   var currMagasin = getMagasinDetails(
-    sheet.getRange(editedRow, TIRELIRE_COLUMNS.MAGASIN).getValue(),
+    sheet.getRange(editedRow, TIRELIRE_DEF.MAGASIN).getValue(),
     SpreadsheetApp.getActiveSpreadsheet()
-      .getSheetByName("magasin")
+      .getSheetByName(MAGASIN_DEF.SHEET_NAME)
       .getDataRange()
       .getValues()
   );
 
   var currResponsable = getUserDetailsByName(
-    sheet.getRange(editedRow, TIRELIRE_COLUMNS.RESPONSABLE).getValue(),
+    sheet.getRange(editedRow, TIRELIRE_DEF.RESPONSABLE).getValue(),
     SpreadsheetApp.getActiveSpreadsheet()
-      .getSheetByName("frere")
+      .getSheetByName(FRERE_DEF.SHEET_NAME)
       .getDataRange()
       .getValues()
   );
 
   if (!currMagasin) {
-    showAlert("Impossible de récupérer les informations du magasin");
+    console.error("Impossible de récupérer les informations du magasin");
     return null;
   }
   if (!currResponsable) {
-    showAlert(
+    console.error(
       "Impossible de récupérer les informations du responsable de cette tirelire"
     );
     return null;
@@ -73,12 +73,12 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
 
     console.log("Event ID: " + event.getId());
   } catch (error) {
-    console.log("Error: " + error.toString());
+    console.error("Error: " + error.toString());
     return null;
   }
 
   if (!event) {
-    showAlert("Impossible de créer l'événement sur le calendrier");
+    console.error("Impossible de créer l'événement sur le calendrier");
     return null;
   } else {
     return event;

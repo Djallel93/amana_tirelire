@@ -1,4 +1,4 @@
-const FRERE_COLUMNS = {
+const FRERE_DEF = {
     NOM: 1,
     PRENOM: 2,
     MAIL: 3,
@@ -6,7 +6,7 @@ const FRERE_COLUMNS = {
     ROLE: 5
 };
 
-const MAGASIN_COLUMNS = {
+const MAGASIN_DEF = {
     NOM: 1,
     ADRESSE: 2,
     QUARTIER: 3,
@@ -17,7 +17,7 @@ const MAGASIN_COLUMNS = {
     TELEPHONE: 8
 };
 
-const TIRELIRE_COLUMNS = {
+const TIRELIRE_DEF = {
     MAGASIN: 1,
     DATE_DEPOT: 2,
     DATE_RETRAIT: 3,

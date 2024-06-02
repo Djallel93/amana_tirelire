@@ -4,7 +4,7 @@ const t = {
   user: Session.getActiveUser().getEmail(),
   source: SpreadsheetApp.getActiveSpreadsheet(),
   range: SpreadsheetApp.getActiveSpreadsheet()
-    .getSheetByName("tirelire")
+    .getSheetByName(TIRELIRE_DEF.SHEET_NAME)
     .getRange("E2"),
   value: "TRUE",
   authMode: "LIMITED",

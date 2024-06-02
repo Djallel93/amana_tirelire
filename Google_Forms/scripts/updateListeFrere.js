@@ -4,7 +4,7 @@ function updateListeFrere() {
 
   console.log("Récupération du Google Sheets associé");
   var sheetID = form.getDestinationId();
-  const sheet = SpreadsheetApp.openById(sheetID).getSheetByName("frere");
+  const sheet = SpreadsheetApp.openById(sheetID).getSheetByName(FRERE_DEF.SHEET_NAME);
   const dataRange = sheet.getDataRange().getValues();
 
   console.log("Récupération des information du frère");
@@ -17,7 +17,7 @@ function updateListeFrere() {
   const values = dataRange
     .slice(1)
     .filter((row) => verifyRow(row))
-    .map((row) => row[FRERE_COLUMNS.NOM - 1] + " " + row[FRERE_COLUMNS.PRENOM - 1])
+    .map((row) => row[FRERE_DEF.NOM - 1] + " " + row[FRERE_DEF.PRENOM - 1])
     .filter((value) => value && value !== currUserFullName);
 
   console.log("Nouvelle liste de frères : " + values);
@@ -36,10 +36,10 @@ function updateListeFrere() {
 
 function verifyRow(row) {
   const REQUIRED_COLUMNS = [
-    FRERE_COLUMNS.NOM,
-    FRERE_COLUMNS.PRENOM,
-    FRERE_COLUMNS.MAIL,
-    FRERE_COLUMNS.ROLE,
+    FRERE_DEF.NOM,
+    FRERE_DEF.PRENOM,
+    FRERE_DEF.MAIL,
+    FRERE_DEF.ROLE,
   ];
 
   return REQUIRED_COLUMNS.every((colIndex) => row[colIndex - 1]);

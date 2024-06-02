@@ -22,13 +22,12 @@ function onEdit(e) {
   var currentUser = getUserDetailsByMail(
     e.user,
     SpreadsheetApp.getActiveSpreadsheet()
-      .getSheetByName("frere")
+      .getSheetByName(FRERE_DEF.SHEET_NAME)
       .getDataRange()
       .getValues()
   );
 
   if (!currentUser) {
-    // Définir la propriété de rollback
     PropertiesService.getScriptProperties().setProperty(
       "rollbackInProgress",
       "true"
@@ -57,15 +56,13 @@ function onEdit(e) {
     return; // Exit if the user is not allowed to edit
   }
 
-  // Call the function to handle "recupere" and "perdu" logic
-  if (sheet.getName() == "frere" && e.range.getRow() > 1) {
+  if (sheet.getName() == FRERE_DEF.SHEET_NAME && e.range.getRow() > 1) {
     var editedRow = e.range.getRow();
     var editedColumn = e.range.getColumn();
     updateListeFrere(sheet, editedRow, editedColumn);
   }
 
-  // Call the function to handle "recupere" and "perdu" logic
-  if (sheet.getName() == "tirelire" && e.range.getRow() > 1) {
+  if (sheet.getName() == TIRELIRE_DEF.SHEET_NAME && e.range.getRow() > 1) {
     var editedRow = e.range.getRow();
     var editedColumn = e.range.getColumn();
 
