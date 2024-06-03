@@ -29,9 +29,6 @@ jobs:
     steps:
       - name: Super-Linter
         uses: super-linter/super-linter@v6.5.1
-        env:
-          # To report GitHub Actions status checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy Sheets project to Google Apps Script
         uses: Mayu-mic/google-apps-script-action@v1
