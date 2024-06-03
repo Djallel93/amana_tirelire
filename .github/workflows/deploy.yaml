@@ -1,0 +1,76 @@
+name: Deploy Script
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 12
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+  deployment:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - directory: ./Google_Forms
+            script_id: ${{ secrets.SCRIPT_ID_GOOGLE_FORMS }}
+          - directory: ./Google_Sheets
+            script_id: ${{ secrets.SCRIPT_ID_GOOGLE_SHEETS }}
+
+    steps:
+      - name: Super-Linter
+        uses: super-linter/super-linter@v6.5.1
+        env:
+          # To report GitHub Actions status checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to Google Apps Script
+        uses: Mayu-mic/google-apps-script-action@v1
+        with:
+          clasprc: ${{ matrix.directory }}/.clasp.json
+          scriptId: ${{ secrets.SCRIPT_ID }}
+          command: 'push'
+          sourceRootDir: ${{ matrix.directory }}
+
+
+      # - name: Install clasp
+      #   id: install-clasp
+      #   run: sudo npm install @google/clasp
+      # - name: Write CLASPRC_JSON secret to .clasprc.json file
+      #   id: write-clasprc
+      #   run: echo "$CLASPRC_JSON_SECRET" >> ~/.clasprc.json
+      #   env:
+      #     CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
+      # - name: Check clasp login status
+      #   id: clasp_login
+      #   run: clasp login --status
+      # - name: Set scriptId in .clasp.json file
+      #   id: set-script-id
+      #   if: ${{ github.event_name	!= 'schedule' && env.SCRIPT_ID }}
+      #   run: jq '.scriptId = "${{env.SCRIPT_ID}}"' .clasp.json > /tmp/.clasp.json && mv /tmp/.clasp.json .clasp.json
+      #   env:
+      #     SCRIPT_ID: ${{ secrets.SCRIPT_ID }}
+      # - name: Push script to scripts.google.com
+      #   id: clasp-push
+      #   if: ${{ github.event_name	!= 'schedule' }}
+      #   run: clasp push -f
