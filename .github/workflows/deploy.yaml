@@ -10,32 +10,24 @@ on:
       - add_workflow
 
 jobs:
-  setup:
+  deployment:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # cache: 'npm'
-          # cache-dependency-path: /home/runner/.npm/package-lock.json
-          
-      - name: Install dependencies
-        run: npm ci
 
-  deployment:
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Super-Linter
         uses: super-linter/super-linter@v6.5.1
         env:
-          # To report GitHub Actions status checks
+          VALIDATE_ALL_CODEBASE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy Sheets project to Google Apps Script
@@ -43,7 +35,7 @@ jobs:
         with:
           clasprc: ./Google_Sheets/.clasp.json
           scriptId: ${{ secrets.SCRIPT_ID_GOOGLE_SHEETS }}
-          command: 'push'
+          command: "push"
           sourceRootDir: ./Google_Sheets
 
       - name: Deploy Forms project to Google Apps Script
@@ -51,9 +43,8 @@ jobs:
         with:
           clasprc: ./Google_Forms/.clasp.json
           scriptId: ${{ secrets.SCRIPT_ID_GOOGLE_FORMS }}
-          command: 'push'
+          command: "push"
           sourceRootDir: ./Google_Forms
-
 
       # - name: Install clasp
       #   id: install-clasp
