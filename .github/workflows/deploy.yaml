@@ -16,7 +16,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
 
-      - name: Install Node.js
+      - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: 12
@@ -29,14 +29,6 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        include:
-          - directory: ./Google_Forms
-            script_id: ${{ secrets.SCRIPT_ID_GOOGLE_FORMS }}
-          - directory: ./Google_Sheets
-            script_id: ${{ secrets.SCRIPT_ID_GOOGLE_SHEETS }}
-
     steps:
       - name: Super-Linter
         uses: super-linter/super-linter@v6.5.1
@@ -44,13 +36,21 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy to Google Apps Script
+      - name: Deploy Sheets project to Google Apps Script
         uses: Mayu-mic/google-apps-script-action@v1
         with:
-          clasprc: ${{ matrix.directory }}/.clasp.json
-          scriptId: ${{ secrets.SCRIPT_ID }}
+          clasprc: ./Google_Sheets/.clasp.json
+          scriptId: ${{ secrets.SCRIPT_ID_GOOGLE_SHEETS }}
           command: 'push'
-          sourceRootDir: ${{ matrix.directory }}
+          sourceRootDir: ./Google_Sheets
+
+      - name: Deploy Forms project to Google Apps Script
+        uses: Mayu-mic/google-apps-script-action@v1
+        with:
+          clasprc: ./Google_Forms/.clasp.json
+          scriptId: ${{ secrets.SCRIPT_ID_GOOGLE_FORMS }}
+          command: 'push'
+          sourceRootDir: ./Google_Forms
 
 
       # - name: Install clasp
