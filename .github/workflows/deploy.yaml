@@ -29,13 +29,16 @@ jobs:
     steps:
       - name: Super-Linter
         uses: super-linter/super-linter@v6.5.1
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy Sheets project to Google Apps Script
         uses: Mayu-mic/google-apps-script-action@v1
         with:
           clasprc: ./Google_Sheets/.clasp.json
           scriptId: ${{ secrets.SCRIPT_ID_GOOGLE_SHEETS }}
-          command: 'push'
+          command: "push"
           sourceRootDir: ./Google_Sheets
 
       - name: Deploy Forms project to Google Apps Script
@@ -43,9 +46,8 @@ jobs:
         with:
           clasprc: ./Google_Forms/.clasp.json
           scriptId: ${{ secrets.SCRIPT_ID_GOOGLE_FORMS }}
-          command: 'push'
+          command: "push"
           sourceRootDir: ./Google_Forms
-
 
       # - name: Install clasp
       #   id: install-clasp
