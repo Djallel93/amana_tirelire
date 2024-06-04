@@ -7,7 +7,7 @@ function checkEvents() {
   var formUrl = SpreadsheetApp.getActiveSpreadsheet().getFormUrl();
   var formID = FormApp.openByUrl(formUrl).getId();
 
-  console.log("verification de la présence d'événements");
+  console.log('Vérification de la présence d\'événements');
 
   for (var row = 2; row <= lastRow; row++) {
     var eventId = sheet.getRange(row, TIRELIRE_DEF.ID_EVENT).getValue();
@@ -29,14 +29,14 @@ function checkEvents() {
         .getValues()
     );
 
-    console.log("eventId : " + eventId);
-    console.log("dateRetrait : " + dateRetrait);
+    console.log('eventId : ' + eventId);
+    console.log('dateRetrait : ' + dateRetrait);
 
     if (!eventId && !dateRetrait) {
       console.log(
-        "Aucun événement n'a  été trouvé pour le magasin " +
+        'Aucun événement n\'a  été trouvé pour le magasin ' +
           currMagasin.nom +
-          " a la date du " +
+          ' à la date du ' +
           dateRetrait
       );
       return;
@@ -53,48 +53,48 @@ function checkEvents() {
       var today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      console.log("TODAY : " + today);
-      console.log("dateRetraitTheo : " + dateRetraitTheo);
+      console.log('TODAY : ' + today);
+      console.log('dateRetraitTheo : ' + dateRetraitTheo);
 
       if (today.getTime() === dateRetraitTheo.getTime()) {
         try {
           var event = CalendarApp.getEventById(eventId);
           if (event) {
             console.log(
-              "La tirelire du magasin " +
+              'La tirelire du magasin ' +
                 currMagasin.nom +
-                " a dû être récupérée aujourd'hui."
+                ' a dû être récupérée aujourd\'hui.'
             );
             console.log(
-              "Envoi du formulaire au frère " +
+              'Envoi du formulaire au frère ' +
                 currResponsable.nom +
-                " " +
+                ' ' +
                 currResponsable.prenom
             );
             var formUrl =
-              "https://docs.google.com/forms/d/e/" +
+              'https://docs.google.com/forms/d/e/' +
               formID +
-              "/viewform?usp=pp_url&entry.2052962151=" +
+              '/viewform?usp=pp_url&entry.2052962151=' +
               eventId;
-            var subject = "Tirelire du magasin " + currMagasin.nom;
+            var subject = 'Tirelire du magasin ' + currMagasin.nom;
             var body =
-              "Merci d'avoir recupere la tirelire. Veuillez remplir ce formulaire : " +
+              'Merci d\'avoir recupere la tirelire. Veuillez remplir ce formulaire : ' +
               formUrl;
             var options = {
-              name: "AMANA",
+              name: 'AMANA',
               noReply: true,
             };
             try {
               MailApp.sendEmail(currResponsable.email, subject, body, options);
             } catch (error) {
-              console.log("Échec de l'envoi du mail: " + error.toString());
+              console.log('Échec de l\'envoi du mail: ' + error.toString());
             }
           } else {
-            console.log("No event found with the given ID.");
+            console.log('No event found with the given ID.');
           }
         } catch (error) {
           console.log(
-            "Échec de la récupération du calendrier: " + error.toString()
+            'Échec de la récupération du calendrier: ' + error.toString()
           );
         }
       }

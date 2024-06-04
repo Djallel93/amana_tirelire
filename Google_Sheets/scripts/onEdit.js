@@ -1,19 +1,19 @@
 function onEdit(e) {
   // Vérifier si un rollback est en cours
   console.log(
-    "rollbackInProgress : " +
-      PropertiesService.getScriptProperties().getProperty("rollbackInProgress")
+    'rollbackInProgress : ' +
+      PropertiesService.getScriptProperties().getProperty('rollbackInProgress')
   );
   if (
     PropertiesService.getScriptProperties().getProperty(
-      "rollbackInProgress"
-    ) === "true"
+      'rollbackInProgress'
+    ) === 'true'
   ) {
     // Réinitialiser la propriété après rollback
     PropertiesService.getScriptProperties().deleteProperty(
-      "rollbackInProgress"
+      'rollbackInProgress'
     );
-    console.log("une édition est déjà en cours en cours...");
+    console.log('une édition est déjà en cours en cours...');
     return; // Sortie de la fonction pour empêcher la réexécution
   }
 
@@ -29,27 +29,27 @@ function onEdit(e) {
 
   if (!currentUser) {
     PropertiesService.getScriptProperties().setProperty(
-      "rollbackInProgress",
-      "true"
+      'rollbackInProgress',
+      'true'
     );
     noRollbackSetValue(e.range, e.oldValue);
     showAlert(
-      "Le frère " +
+      'Le frère ' +
         e.user +
-        " n'existe pas dans la liste des frères. Merci de vous renseigner auprès de votre administrateur."
+        ' n\'existe pas dans la liste des frères. Merci de vous renseigner auprès de votre administrateur.'
     );
     return;
   }
 
-  console.log("Session user: " + e.user);
+  console.log('Session user: ' + e.user);
   console.log(
-    "La cellule " +
+    'La cellule ' +
       e.range.getColumn() +
-      ":" +
+      ':' +
       e.range.getRow() +
-      " de la page " +
+      ' de la page ' +
       sheet.getName() +
-      " est en cours d’édition..."
+      ' est en cours d\'édition...'
   );
 
   if (!canEditCells(e, currentUser)) {

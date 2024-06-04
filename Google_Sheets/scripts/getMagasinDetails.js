@@ -1,7 +1,7 @@
 function getMagasinDetails(nom, magasinData) {
   for (var i = 1; i < magasinData.length; i++) {
     if (magasinData[i][MAGASIN_DEF.NOM - 1] == nom) {
-      console.log("Le magasin " + nom + " existe dans la feuille magasin");
+      console.log('Le magasin ' + nom + ' existe dans la feuille magasin');
       return {
         nom: magasinData[i][MAGASIN_DEF.NOM - 1],
         adresse: magasinData[i][MAGASIN_DEF.ADRESSE - 1],
@@ -12,6 +12,6 @@ function getMagasinDetails(nom, magasinData) {
       };
     }
   }
-  console.log("Le magasin " + nom + " n'existe pas dans la feuille magasin");
+  console.log('Le magasin ' + nom + ' n\'existe pas dans la feuille magasin');
   return null;
 }

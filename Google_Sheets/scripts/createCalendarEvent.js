@@ -16,12 +16,12 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
   );
 
   if (!currMagasin) {
-    console.error("Impossible de récupérer les informations du magasin");
+    console.error('Impossible de récupérer les informations du magasin');
     return null;
   }
   if (!currResponsable) {
     console.error(
-      "Impossible de récupérer les informations du responsable de cette tirelire"
+      'Impossible de récupérer les informations du responsable de cette tirelire'
     );
     return null;
   }
@@ -33,13 +33,13 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
     );
   }
   console.log(
-    "La deadline pour recupere la tirelire du magasin " +
+    'La deadline pour recupere la tirelire du magasin ' +
       currMagasin.nom +
-      " est le " +
+      ' est le ' +
       deadline
   );
 
-  var title = "Récupérer la tirelire";
+  var title = 'Récupérer la tirelire';
 
   var startTime = new Date(deadline);
   startTime.setHours(8, 0, 0);
@@ -49,36 +49,36 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
 
   var options = {
     description:
-      "السلام عليكم و رحمة الله و بركاته" +
-      "\n\nMerci de récupérer la tirelire chez " +
+      'السلام عليكم و رحمة الله و بركاته' +
+      '\n\nMerci de récupérer la tirelire chez ' +
       currMagasin.nom +
-      "\n\nTel: " +
+      '\n\nTel: ' +
       currMagasin.telephone +
-      "\n\n بارك الله فيكم",
+      '\n\n بارك الله فيكم',
     location:
       currMagasin.adresse +
-      ", " +
+      ', ' +
       currMagasin.codePostal +
-      ", " +
+      ', ' +
       currMagasin.ville,
     guests: currResponsable.email,
   };
 
-  console.log("Création de l'événement en cours...");
+  console.log('Création de l\'événement en cours...');
   try {
     var event = calendar.createEvent(title, startTime, endTime, options);
     event
       .addPopupReminder(2880) // Trois jour avant
       .addPopupReminder(8640); // Une semaine avant
 
-    console.log("Event ID: " + event.getId());
+    console.log('Event ID: ' + event.getId());
   } catch (error) {
-    console.error("Error: " + error.toString());
+    console.error('Error: ' + error.toString());
     return null;
   }
 
   if (!event) {
-    console.error("Impossible de créer l'événement sur le calendrier");
+    console.error('Impossible de créer l\'événement sur le calendrier');
     return null;
   } else {
     return event;

@@ -1,13 +1,13 @@
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu("Fonctions Personnalisées")
-    .addItem("Initialisation des événement", "initCalendarEvents")
+  ui.createMenu('Fonctions Personnalisées')
+    .addItem('Initialisation des événement', 'initCalendarEvents')
     .addSeparator()
     .addSubMenu(
       ui
-        .createMenu("Actions manuelles")
-        .addItem("Reprogrammer une collecte", "manualReScheduleEvent")
-        .addItem("Transférer la responsabilité", "manuelTransferResponsable")
+        .createMenu('Actions manuelles')
+        .addItem('Reprogrammer une collecte', 'manualReScheduleEvent')
+        .addItem('Transférer la responsabilité', 'manuelTransferResponsable')
     )
     .addToUi();
 }
@@ -18,7 +18,7 @@ function initCalendarEvents() {
   );
   var lastRow = sheet.getLastRow();
 
-  console.log("Récupération de l'ID du calendrier de l'utilisateur");
+  console.log('Récupération de l\'ID du calendrier de l\'utilisateur');
   var calendar = CalendarApp.getDefaultCalendar();
 
   for (var row = 2; row <= lastRow; row++) {
@@ -39,11 +39,11 @@ function initCalendarEvents() {
 
     if (!event) {
       showAlert(
-        "Impossible de créer l'événement pour le magasin " +
+        'Impossible de créer l\'événement pour le magasin ' +
           sheet.getRange(row, TIRELIRE_DEF.MAGASIN).getValue() +
-          " a la date de dépôt du " +
+          ' a la date de dépôt du ' +
           sheet.getRange(row, TIRELIRE_DEF.DATE_DEPOT).getValue() +
-          " sur le calendrier."
+          ' sur le calendrier.'
       );
       return;
     } else {
@@ -61,20 +61,20 @@ function manualReScheduleEvent() {
   var formID = FormApp.openByUrl(formUrl).getId();
   var ui = SpreadsheetApp.getUi();
   var responseID = ui.prompt(
-    "Id événement",
-    "Veuillez renseigner l'ID de l'événement concerné",
+    'Id événement',
+    'Veuillez renseigner l\'ID de l\'événement concerné',
     ui.ButtonSet.OK_CANCEL
   );
 
   if (responseID.getSelectedButton() == ui.Button.OK) {
     var url =
-      "https://docs.google.com/forms/d/" +
+      'https://docs.google.com/forms/d/' +
       formID +
-      "/viewform?usp=pp_url&entry.2052962151=" +
+      '/viewform?usp=pp_url&entry.2052962151=' +
       responseID.getResponseText() +
-      "&entry.1995875835=Non&entry.1439777403=Non" +
-      "&entry.833798931=Oui";
-    showAnchor("Reprogrammer l'événement", url);
+      '&entry.1995875835=Non&entry.1439777403=Non' +
+      '&entry.833798931=Oui';
+    showAnchor('Reprogrammer l\'événement', url);
   }
 }
 
@@ -83,28 +83,28 @@ function manuelTransferResponsable() {
   var formID = FormApp.openByUrl(formUrl).getId();
   var ui = SpreadsheetApp.getUi();
   var responseID = ui.prompt(
-    "Id événement",
-    "Veuillez renseigner l'ID de l'événement concerné",
+    'Id événement',
+    'Veuillez renseigner l\'ID de l\'événement concerné',
     ui.ButtonSet.OK_CANCEL
   );
 
   var url =
-    "https://docs.google.com/forms/d/" +
+    'https://docs.google.com/forms/d/' +
     formID +
-    "/viewform?usp=pp_url&entry.2052962151=" +
+    '/viewform?usp=pp_url&entry.2052962151=' +
     responseID.getResponseText() +
-    "&entry.1995875835=Non&entry.1439777403=Non" +
-    "&entry.833798931=Non&entry.1111832661=Oui";
-  showAnchor("Transférer le responsable", url);
+    '&entry.1995875835=Non&entry.1439777403=Non' +
+    '&entry.833798931=Non&entry.1111832661=Oui';
+  showAnchor('Transférer le responsable', url);
 }
 
 function showAnchor(name, url) {
-  var template = HtmlService.createTemplateFromFile("formsLink");
+  var template = HtmlService.createTemplateFromFile('formsLink');
   template.name = name;
   template.url = url;
   var htmlOutput = template.evaluate().setWidth(300).setHeight(200);
   SpreadsheetApp.getUi().showModelessDialog(
     htmlOutput,
-    "Lien vers le formulaire"
+    'Lien vers le formulaire'
   );
 }

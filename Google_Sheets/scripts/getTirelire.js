@@ -21,7 +21,7 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
     (editedColumn === TIRELIRE_DEF.RECUPERE && cellValue) ||
     (editedColumn === TIRELIRE_DEF.PERDU && cellValue)
   ) {
-    rowRange.setBackground("white");
+    rowRange.setBackground('white');
     // Vérifiez si l'édition est dans la colonne 'perdu'
     if (editedColumn === TIRELIRE_DEF.PERDU && cellValue) {
       // Mettre le montant à 0
@@ -31,12 +31,12 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
       );
 
       // Colorier la ligne en rouge
-      rowRange.setBackground("#dd0531");
+      rowRange.setBackground('#dd0531');
     }
 
     // Évitez les exécutions multiples en vérifiant si les actions ont déjà été effectuées
     if (
-      sheet.getRange(editedRow, TIRELIRE_DEF.DATE_RETRAIT).getValue() === ""
+      sheet.getRange(editedRow, TIRELIRE_DEF.DATE_RETRAIT).getValue() === ''
     ) {
       // Met à jour la date_retrait avec la date d'aujourd'hui
       noRollbackSetValue(
@@ -65,28 +65,28 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
       // Vider les colonnes 'montant', 'recupere' et 'perdu' de la nouvelle ligne
       noRollbackSetValue(
         sheet.getRange(newRow, TIRELIRE_DEF.DATE_RETRAIT),
-        ""
+        ''
       );
-      noRollbackSetValue(sheet.getRange(newRow, TIRELIRE_DEF.MONTANT), "");
+      noRollbackSetValue(sheet.getRange(newRow, TIRELIRE_DEF.MONTANT), '');
       noRollbackSetValue(
         sheet.getRange(newRow, TIRELIRE_DEF.RECUPERE),
         false
       );
       noRollbackSetValue(sheet.getRange(newRow, TIRELIRE_DEF.PERDU), false);
 
-      newRowRange.setBackground("white");
+      newRowRange.setBackground('white');
 
       // Creation de l'événement sur le calendrier
       var event = createCalendarEvent(sheet, editedRow, calendar);
       console.log(
-        "Événement crée avec succès. Mise à jour de la nouvelle ligne : " +
+        'Événement crée avec succès. Mise à jour de la nouvelle ligne : ' +
           newRow
       );
       noRollbackSetValue(
         sheet.getRange(newRow, TIRELIRE_DEF.ID_EVENT),
         event.getId()
       );
-      sheet.getRange(editedRow, TIRELIRE_DEF.ID_EVENT).setValue("");
+      sheet.getRange(editedRow, TIRELIRE_DEF.ID_EVENT).setValue('');
     }
   }
 }
