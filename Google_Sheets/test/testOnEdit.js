@@ -5,10 +5,10 @@ const t = {
   source: SpreadsheetApp.getActiveSpreadsheet(),
   range: SpreadsheetApp.getActiveSpreadsheet()
     .getSheetByName(TIRELIRE_DEF.SHEET_NAME)
-    .getRange("E2"),
-  value: "TRUE",
-  authMode: "LIMITED",
-};
+    .getRange('E2'),
+  value: 'TRUE',
+  authMode: 'LIMITED'
+}
 
 // tirelire récupéré par le mauvais user
 
@@ -31,6 +31,6 @@ const t = {
 //   authMode: "LIMITED"
 // }
 
-function testOnEdit() {
-  onEdit(t);
+function testOnEdit () {
+  onEdit(t)
 }

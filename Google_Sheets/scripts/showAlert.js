@@ -1,3 +1,3 @@
-function showAlert(message) {
-    SpreadsheetApp.getUi().alert(message);
+function showAlert (message) {
+  SpreadsheetApp.getUi().alert(message)
 }
