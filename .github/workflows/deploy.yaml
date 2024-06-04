@@ -11,25 +11,31 @@ on:
       - add_workflow
 
 jobs:
-  deployment:
+  lint:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
       - name: Super-Linter
         uses: super-linter/super-linter@v6.5.1
         env:
           VALIDATE_ALL_CODEBASE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
       - name: Deploy Sheets project to Google Apps Script
         uses: Mayu-mic/google-apps-script-action@v1
@@ -61,7 +67,7 @@ jobs:
       # - name: Set scriptId in .clasp.json file
       #   id: set-script-id
       #   if: ${{ github.event_name	!= 'schedule' && env.SCRIPT_ID }}
-      #   run: jq '.scriptId = "${{env.SCRIPT_ID}}"' .clasp.json > 
+      #   run: jq '.scriptId = "${{env.SCRIPT_ID}}"' .clasp.json >
       # /tmp/.clasp.json && mv /tmp/.clasp.json .clasp.json
       #   env:
       #     SCRIPT_ID: ${{ secrets.SCRIPT_ID }}
