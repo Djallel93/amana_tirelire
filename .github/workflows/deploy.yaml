@@ -10,7 +10,7 @@ on:
       - add_workflow
 
 jobs:
-  setup:
+  deployment:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,11 +22,6 @@ jobs:
         with:
           node-version: 20
 
-  deployment:
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Super-Linter
         uses: super-linter/super-linter@v6.5.1
         env:
