@@ -11,7 +11,7 @@ function updateListeFrere() {
 
   console.log("Récupération des information du frère");
   const email = Session.getActiveUser().getEmail();
-  const currentUser = getUserDetailsByMail(email);
+  const currentUser = getUserDetailsByMail(email, dataRange);
 
   console.log("Création de la liste des frères");
   const currUserFullName = currentUser.nom + " " + currentUser.prenom;
@@ -24,7 +24,9 @@ function updateListeFrere() {
         row[FRERE_DEF.NOM.INDEX - 1] + " " + row[FRERE_DEF.PRENOM.INDEX - 1]
     )
     .filter((value) => value && value !== currUserFullName);
-
+  if (values.length === 0) {
+    values.push("");
+  }
   console.log("Nouvelle liste de frères : " + values);
 
   console.log("Mise à jour de la liste des frères");

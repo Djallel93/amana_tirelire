@@ -78,7 +78,7 @@ function checkEvents() {
               eventId;
             const subject = "Tirelire du magasin " + currMagasin.nom;
             const body =
-              "Merci d'avoir récupéré la tirelire. Veuillez remplir ce formulaire : " +
+              "Merci d'avoir récupéré la tirelire. Veuillez remplir ce formulaire : \n\n" +
               formUrl;
             const options = {
               name: "AMANA",

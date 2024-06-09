@@ -28,7 +28,9 @@ const TIRELIRE_DEF = {
   RECUPERE: { INDEX: 5, TYPE: "boolean" },
   PERDU: { INDEX: 6, TYPE: "boolean" },
   RESPONSABLE: { INDEX: 7, TYPE: "string" },
-  ID_EVENT: { INDEX: 8, TYPE: "string" },
+  NOTE: { INDEX: 8, TYPE: "number" },
+  COMMENTAIRE: { INDEX: 9, TYPE: "string" },
+  ID_EVENT: { INDEX: 10, TYPE: "string" },
 };
 
 const QUESTIONS_FORMULAIRE = {
@@ -43,5 +45,7 @@ const QUESTIONS_FORMULAIRE = {
   CONTENU_CONNU: "Savez vous combien contenait la tirelire ?",
   MONTANT_RECUPERE: "Veuillez saisir le montant récupéré",
   EMAIL: "Adresse e-mail",
-  ID_EVENEMENT: "Quel est l'ID de l'évènement sur Google Calendar ?",
+  ID_EVENT: "Quel est l'ID de l'évènement sur Google Calendar ?",
+  NOTE_RECUP: "Comment s'est passé la récupération de la tirelire",
+  COMM_RECUP: "Laisser un commentaire ?",
 };
