@@ -1,86 +1,85 @@
-function createCalendarEvent (sheet, editedRow, calendar, deadline) {
+function createCalendarEvent(sheet, editedRow, calendar, deadline) {
   const currMagasin = getMagasinDetails(
-    sheet.getRange(editedRow, TIRELIRE_DEF.MAGASIN).getValue(),
+    sheet.getRange(editedRow, TIRELIRE_DEF.MAGASIN.INDEX).getValue(),
     SpreadsheetApp.getActiveSpreadsheet()
       .getSheetByName(MAGASIN_DEF.SHEET_NAME)
       .getDataRange()
       .getValues()
-  )
+  );
 
   const currResponsable = getUserDetailsByName(
-    sheet.getRange(editedRow, TIRELIRE_DEF.RESPONSABLE).getValue(),
-    SpreadsheetApp.getActiveSpreadsheet()
-      .getSheetByName(FRERE_DEF.SHEET_NAME)
-      .getDataRange()
-      .getValues()
-  )
+    sheet.getRange(editedRow, TIRELIRE_DEF.RESPONSABLE.INDEX).getValue()
+  );
 
   if (!currMagasin) {
-    console.error('Impossible de récupérer les informations du magasin')
-    return null
+    console.error("Impossible de récupérer les informations du magasin");
+    return null;
   }
   if (!currResponsable) {
     console.error(
-      'Impossible de récupérer les informations du responsable de cette tirelire'
-    )
-    return null
+      "Impossible de récupérer les informations du responsable de cette tirelire"
+    );
+    return null;
   }
 
   if (!deadline) {
-    var deadline = new Date()
-    deadline.setDate(
-      deadline.getDate() + parseInt(currMagasin.delaisRecuperation)
-    )
+    var deadline = new Date();
   }
+
+  deadline.setDate(
+    deadline.getDate() + parseInt(currMagasin.delaisRecuperation)
+  );
+
   console.log(
-    'La deadline pour recupere la tirelire du magasin ' +
+    "La deadline pour recupere la tirelire du magasin " +
       currMagasin.nom +
-      ' est le ' +
+      " est le " +
       deadline
-  )
+  );
 
-  const title = 'Récupérer la tirelire'
+  const title = "Récupérer la tirelire";
 
-  const startTime = new Date(deadline)
-  startTime.setHours(8, 0, 0)
+  const startTime = new Date(deadline);
+  startTime.setHours(8, 0, 0);
 
-  const endTime = new Date(deadline)
-  endTime.setHours(19, 0, 0)
+  const endTime = new Date(deadline);
+  endTime.setHours(19, 0, 0);
 
   const options = {
     description:
-      'السلام عليكم و رحمة الله و بركاته' +
-      '\n\nMerci de récupérer la tirelire chez ' +
+      "السلام عليكم و رحمة الله و بركاته" +
+      "\n\nMerci de récupérer la tirelire chez " +
       currMagasin.nom +
-      '\n\nTel: ' +
+      "\n\nTel: " +
       currMagasin.telephone +
-      '\n\n بارك الله فيكم',
+      "\n\n بارك الله فيكم",
     location:
       currMagasin.adresse +
-      ', ' +
+      ", " +
       currMagasin.codePostal +
-      ', ' +
+      ", " +
       currMagasin.ville,
-    guests: currResponsable.email
-  }
+    guests: currResponsable.email,
+  };
 
-  console.log('Création de l\'événement en cours...')
+  console.log("Création de l'événement en cours...");
   try {
-    var event = calendar.createEvent(title, startTime, endTime, options)
+    var event = calendar.createEvent(title, startTime, endTime, options);
     event
-      .addPopupReminder(2880) // Trois jour avant
-      .addPopupReminder(8640) // Une semaine avant
+      .addPopupReminder(120) // Deux heures avant
+      .addPopupReminder(1440) // Un jour avant
+      .addPopupReminder(10080); // Une semaine avant
 
-    console.log('Event ID: ' + event.getId())
+    console.log("Event ID: " + event.getId());
   } catch (error) {
-    console.error('Error: ' + error.toString())
-    return null
+    console.error("La création de l'événement sur le calendrier a échouée: " + error.toString());
+    return null;
   }
 
   if (!event) {
-    console.error('Impossible de créer l\'événement sur le calendrier')
-    return null
+    console.error("Impossible de créer l'événement sur le calendrier");
+    return null;
   } else {
-    return event
+    return event;
   }
 }

@@ -1,71 +1,87 @@
-function onEdit (e) {
+function onEdit(e) {
   // Vérifier si un rollback est en cours
-  console.log(
-    'rollbackInProgress : ' +
-      PropertiesService.getScriptProperties().getProperty('rollbackInProgress')
-  )
   if (
     PropertiesService.getScriptProperties().getProperty(
-      'rollbackInProgress'
-    ) === 'true'
+      "rollbackInProgress"
+    ) === "true"
   ) {
     // Réinitialiser la propriété après rollback
     PropertiesService.getScriptProperties().deleteProperty(
-      'rollbackInProgress'
-    )
-    console.log('une édition est déjà en cours en cours...')
-    return // Sortie de la fonction pour empêcher la réexécution
+      "rollbackInProgress"
+    );
+    console.log("une édition est déjà en cours en cours...");
+    return; // Sortie de la fonction pour empêcher la réexécution
   }
 
-  const calendar = CalendarApp.getDefaultCalendar()
-  const sheet = e.source.getActiveSheet()
-  const currentUser = getUserDetailsByMail(
-    e.user,
-    SpreadsheetApp.getActiveSpreadsheet()
-      .getSheetByName(FRERE_DEF.SHEET_NAME)
-      .getDataRange()
-      .getValues()
-  )
+  const calendar = CalendarApp.getDefaultCalendar();
+  const sheet = e.source.getActiveSheet();
+  const sheetName = sheet.getName();
+  const editedRow = e.range.getRow();
+  const editedColumn = e.range.getColumn();
+  const userMail = e.user.getEmail();
+  const currentUser = getUserDetailsByMail(userMail);
 
   if (!currentUser) {
     PropertiesService.getScriptProperties().setProperty(
-      'rollbackInProgress',
-      'true'
-    )
-    noRollbackSetValue(e.range, e.oldValue)
+      "rollbackInProgress",
+      "true"
+    );
+    noRollbackSetValue(
+      e.range,
+      e.oldValue,
+      getColumnType(sheetName, editedColumn)
+    );
     showAlert(
-      'Le frère ' +
-        e.user +
-        ' n\'existe pas dans la liste des frères. Merci de vous renseigner auprès de votre administrateur.'
-    )
-    return
+      "Le frère " +
+        userMail +
+        " n'existe pas dans la liste des frères. Merci de vous renseigner auprès de votre administrateur."
+    );
+    return;
   }
 
-  console.log('Session user: ' + e.user)
+  console.log("Session user: " + userMail);
+
+  if (
+    sheetName !== FRERE_DEF.SHEET_NAME &&
+    !canEditCells(sheet, editedRow, userMail)
+  ) {
+    // Annuler la modification si l'utilisateur n'est pas autorisé
+    noRollbackSetValue(
+      e.range,
+      e.oldValue,
+      getColumnType(sheetName, editedColumn)
+    );
+    return;
+  }
+
+  console.log("Le frère actuelle possède le droit de modifier le champs...");
+
+  // Tous les administrateur peuvent modifier n'importe quel responsable
+  if (
+    sheetName === TIRELIRE_DEF.SHEET_NAME &&
+    editedColumn === TIRELIRE_DEF.RESPONSABLE.INDEX
+  ) {
+    if (!canEditResponsable(e, currentUser)) {
+      return;
+    }
+  }
+
   console.log(
-    'La cellule ' +
-      e.range.getColumn() +
-      ':' +
-      e.range.getRow() +
-      ' de la page ' +
-      sheet.getName() +
-      ' est en cours d\'édition...'
-  )
+    "Le frère " +
+      userMail +
+      " possède le droit de modifier le champs responsable..."
+  );
 
-  if (!canEditCells(e, currentUser)) {
-    return // Exit if the user is not allowed to edit
+  if (sheetName === FRERE_DEF.SHEET_NAME && editedRow > 1) {
+    updateListeFrere(sheet, editedRow, editedColumn);
   }
 
-  if (sheet.getName() === FRERE_DEF.SHEET_NAME && e.range.getRow() > 1) {
-    var editedRow = e.range.getRow()
-    var editedColumn = e.range.getColumn()
-    updateListeFrere(sheet, editedRow, editedColumn)
+  if (sheetName == TIRELIRE_DEF.SHEET_NAME && editedRow > 1) {
+    getTirelire(sheet, editedRow, editedColumn, calendar);
   }
 
-  if (sheet.getName() == TIRELIRE_DEF.SHEET_NAME && e.range.getRow() > 1) {
-    var editedRow = e.range.getRow()
-    var editedColumn = e.range.getColumn()
-
-    getTirelire(sheet, editedRow, editedColumn, calendar)
-  }
+  PropertiesService.getScriptProperties().setProperty(
+    "rollbackInProgress",
+    "false"
+  );
 }
