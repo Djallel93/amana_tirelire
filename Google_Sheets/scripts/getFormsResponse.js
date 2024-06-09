@@ -10,9 +10,13 @@ function getFormsResponse(e) {
   const tirelireData = tirelireSheet.getDataRange().getValues();
 
   let montant = "";
-  const id_event = getCellValue(
+  const id_event = getCellValue(formResponse, QUESTIONS_FORMULAIRE.ID_EVENT);
+
+  const note = getCellValue(formResponse, QUESTIONS_FORMULAIRE.NOTE_RECUP);
+
+  const commentaire = getCellValue(
     formResponse,
-    QUESTIONS_FORMULAIRE.ID_EVENEMENT
+    QUESTIONS_FORMULAIRE.COMM_RECUP
   );
 
   if (getCellValue(formResponse, QUESTIONS_FORMULAIRE.TRANSFERER) === "Non") {
@@ -38,10 +42,13 @@ function getFormsResponse(e) {
           tirelireSheet
             .getRange(i + 1, TIRELIRE_DEF.RECUPERE.INDEX)
             .setValue(true);
-
           tirelireSheet
             .getRange(i + 1, TIRELIRE_DEF.MONTANT.INDEX)
             .setValue(montant);
+          tirelireSheet.getRange(i + 1, TIRELIRE_DEF.NOTE.INDEX).setValue(note);
+          tirelireSheet
+            .getRange(i + 1, TIRELIRE_DEF.COMMENTAIRE.INDEX)
+            .setValue(commentaire);
 
           getTirelire(
             tirelireSheet,
@@ -66,6 +73,12 @@ function getFormsResponse(e) {
             tirelireSheet
               .getRange(i + 1, TIRELIRE_DEF.PERDU.INDEX)
               .setValue(true);
+            tirelireSheet
+              .getRange(i + 1, TIRELIRE_DEF.NOTE.INDEX)
+              .setValue(note);
+            tirelireSheet
+              .getRange(i + 1, TIRELIRE_DEF.COMMENTAIRE.INDEX)
+              .setValue(commentaire);
 
             getTirelire(
               tirelireSheet,

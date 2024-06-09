@@ -1,6 +1,5 @@
 function getTirelire(sheet, editedRow, editedColumn, calendar) {
   const currentDate = new Date();
-  const rowRange = sheet.getRange(editedRow, 1, 1, sheet.getLastColumn());
   const cellValue = sheet.getRange(editedRow, editedColumn).getValue();
 
   if (
@@ -21,7 +20,6 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
     (editedColumn === TIRELIRE_DEF.RECUPERE.INDEX && cellValue) ||
     (editedColumn === TIRELIRE_DEF.PERDU.INDEX && cellValue)
   ) {
-    rowRange.setBackground("white");
     // Vérifiez si l'édition est dans la colonne 'perdu'
     if (editedColumn === TIRELIRE_DEF.PERDU.INDEX && cellValue) {
       // Mettre le montant à 0
@@ -30,9 +28,6 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
         0,
         TIRELIRE_DEF.MONTANT.TYPE
       );
-
-      // Colorier la ligne en rouge
-      rowRange.setBackground("#dd0531");
     }
 
     // Évitez les exécutions multiples en vérifiant si les actions ont déjà été effectuées
@@ -48,7 +43,6 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
       );
 
       const newRow = sheet.getLastRow() + 1;
-      const newRowRange = sheet.getRange(newRow, 1, 1, sheet.getLastColumn());
 
       // Copier la ligne éditée dans la nouvelle ligne
       sheet
@@ -69,12 +63,12 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
       // Vider les colonnes 'montant', 'recupere' et 'perdu' de la nouvelle ligne
       noRollbackSetValue(
         sheet.getRange(newRow, TIRELIRE_DEF.DATE_RETRAIT.INDEX),
-        "",
+        null,
         TIRELIRE_DEF.DATE_RETRAIT.TYPE
       );
       noRollbackSetValue(
         sheet.getRange(newRow, TIRELIRE_DEF.MONTANT.INDEX),
-        "",
+        null,
         TIRELIRE_DEF.MONTANT.TYPE
       );
       noRollbackSetValue(
@@ -87,8 +81,16 @@ function getTirelire(sheet, editedRow, editedColumn, calendar) {
         false,
         TIRELIRE_DEF.PERDU.TYPE
       );
-
-      newRowRange.setBackground("white");
+      noRollbackSetValue(
+        sheet.getRange(newRow, TIRELIRE_DEF.NOTE.INDEX),
+        0,
+        TIRELIRE_DEF.NOTE.TYPE
+      );
+      noRollbackSetValue(
+        sheet.getRange(newRow, TIRELIRE_DEF.COMMENTAIRE.INDEX),
+        "",
+        TIRELIRE_DEF.COMMENTAIRE.TYPE
+      );
 
       // Creation de l'événement sur le calendrier
       const event = createCalendarEvent(sheet, editedRow, calendar);
