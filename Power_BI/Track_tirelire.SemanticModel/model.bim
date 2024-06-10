@@ -815,7 +815,7 @@
                 "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Inserted Merged Column\",{\"nom\", \"adresse\", \"quartier\", \"type\", \"delais recuperation\", \"telephone\", \"Merged\"}),",
                 "    #\"Renamed Columns\" = Table.RenameColumns(#\"Removed Other Columns\",{{\"Merged\", \"ville\"}}),",
                 "    #\"Filtered Rows\" = Table.SelectRows(#\"Renamed Columns\", each [nom] <> null and [nom] <> \"\"),",
-                "    #\"Added Custom Column\" = Table.AddColumn(#\"Filtered Rows\", \"Custom\", each Text.Combine({\"+\", Text.Middle([telephone], 6, 1), Text.Middle([telephone], 6, 1), \" (\", Text.Middle([ville], 19, 1), \") \", Text.Start([telephone], 1), \" \", Text.Middle([telephone], 1, 2), \" \", Text.Middle([telephone], 3, 2), \" \", Text.Middle([telephone], 5, 2), \" \", Text.Middle([telephone], 7)}), type text),",
+                "    #\"Added Custom Column\" = Table.AddColumn(#\"Filtered Rows\", \"Custom\", each Text.Combine({\"+33 (0) \", Text.Start([telephone], 1), \" \", Text.Middle([telephone], 1, 2), \" \", Text.Middle([telephone], 3, 2), \" \", Text.Middle([telephone], 5, 2), \" \", Text.Middle([telephone], 7)}), type text),",
                 "    #\"Removed Columns\" = Table.RemoveColumns(#\"Added Custom Column\",{\"telephone\"}),",
                 "    #\"Renamed Columns1\" = Table.RenameColumns(#\"Removed Columns\",{{\"Custom\", \"telephone\"}})",
                 "in",
@@ -832,6 +832,10 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
