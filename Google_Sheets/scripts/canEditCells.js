@@ -1,8 +1,18 @@
 function canEditCells(sheet, editedRow, userMail) {
+  if (!sheet || typeof editedRow !== "number" || typeof userMail !== "string") {
+    console.error("Paramètres invalides fournis à canEditCells");
+    return false;
+  }
+
   console.log(
     "Vérification si le frère actuelle possède le droit de modifier le champs..."
   );
   const currentUser = getUserDetailsByMail(userMail);
+
+  if (!currentUser) {
+    console.error("Utilisateur actuel non trouvé pour l'e-mail : " + userMail);
+    return false;
+  }
 
   if (currentUser.role.toLowerCase() === "administrateur") {
     return true;
@@ -25,12 +35,12 @@ function canEditCells(sheet, editedRow, userMail) {
   }
 
   const responsable = sheet
-    .getRange(editedRow, TIRELIRE_DEF.RESPONSABLE.INDEX)
+    .getRange(editedRow, getRealColumnIndex("TIRELIRE", "RESPONSABLE"))
     .getValue();
 
-  const expectedResponsable = currentUser.nom + " " + currentUser.prenom;
+  const currResponsable = currentUser.nom + " " + currentUser.prenom;
 
-  if (responsable === expectedResponsable) {
+  if (responsable === currResponsable) {
     return true;
   } else {
     console.error(

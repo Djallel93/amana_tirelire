@@ -1,12 +1,22 @@
-function noRollbackSetValue(range, value, columnType) {
+function noRollbackSetValue(range, value) {
+  if (!range || typeof value === "undefined") {
+    console.error("Paramètres invalides fournis à noRollbackSetValue");
+    return;
+  }
+
   // Définir la propriété de rollback
   PropertiesService.getScriptProperties().setProperty(
     "rollbackInProgress",
     "true"
   );
 
-  Logger.log("Object type: " + Object.prototype.toString.call(value));
-  Logger.log("Column type: " + columnType);
+  // Obtenir le type de colonne
+  const sheet = range.getSheet();
+  const column = range.getColumn();
+  const sheetName = sheet.getName().toUpperCase();
+  const columnName = sheet.getRange(1, column).getValue().toUpperCase();
+
+  const columnType = getColumnType(sheetName, columnName);
 
   switch (columnType) {
     case "date":
@@ -50,27 +60,4 @@ function noRollbackSetValue(range, value, columnType) {
       range.setValue(value);
       break;
   }
-}
-
-function getColumnType(sheetName, column) {
-  console.log("sheetName : " + sheetName);
-  console.log("column : " + column);
-
-  let sheetDefs = [FRERE_DEF, MAGASIN_DEF, TIRELIRE_DEF];
-  let columnType;
-
-  for (let sheetDef of sheetDefs) {
-    if (sheetDef.SHEET_NAME === sheetName) {
-      for (let key in sheetDef) {
-        if (sheetDef[key].INDEX === column) {
-          columnType = sheetDef[key].TYPE;
-          console.log("columnType : " + columnType);
-          break;
-        }
-      }
-      if (columnType) break;
-    }
-  }
-
-  return columnType;
 }

@@ -1,38 +1,50 @@
 function checkEvents() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
-    TIRELIRE_DEF.SHEET_NAME
-  );
-  const lastRow = sheet.getLastRow();
+  const sheet = getSheetByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
 
   var formUrl = SpreadsheetApp.getActiveSpreadsheet().getFormUrl();
+
+  if (!formUrl) {
+    console.error("Aucune URL de formulaire associée à la feuille de calcul");
+    return;
+  }
+
   const formID = FormApp.openByUrl(formUrl).getId();
 
   console.log("Vérification de la présence d'événements");
 
-  for (let row = 2; row <= lastRow; row++) {
-    const eventId = sheet.getRange(row, TIRELIRE_DEF.ID_EVENT.INDEX).getValue();
-    const dateRetrait = sheet
-      .getRange(row, TIRELIRE_DEF.DATE_RETRAIT.INDEX)
-      .getValue();
+  const rows = sheet
+    .getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn())
+    .getValues();
 
-    const currMagasin = getMagasinDetails(
-      sheet.getRange(row, TIRELIRE_DEF.MAGASIN.INDEX).getValue(),
-      SpreadsheetApp.getActiveSpreadsheet()
-        .getSheetByName(MAGASIN_DEF.SHEET_NAME)
-        .getDataRange()
-        .getValues()
-    );
+  rows.forEach((row) => {
+    const eventId = row[getColumnIndex("TIRELIRE", "ID_EVENT")];
+    const dateRetrait = row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")];
+    const magasinNom = row[getColumnIndex("TIRELIRE", "MAGASIN")];
+    const responsableNom = row[getColumnIndex("TIRELIRE", "RESPONSABLE")];
 
-    const currResponsable = getUserDetailsByName(
-      sheet.getRange(row, TIRELIRE_DEF.RESPONSABLE.INDEX).getValue()
-    );
+    const currMagasin = getMagasinDetails(magasinNom);
+    if (!currMagasin) {
+      console.error(
+        "Impossible de récupérer les informations du magasin : " + magasinNom
+      );
+      return;
+    }
+
+    const currResponsable = getUserDetailsByName(responsableNom);
+    if (!currResponsable) {
+      console.error(
+        "Impossible de récupérer les informations du responsable : " +
+          responsableNom
+      );
+      return;
+    }
 
     console.log("eventId : " + eventId);
     console.log("dateRetrait : " + dateRetrait);
 
     if (!eventId && !dateRetrait) {
       console.error(
-        "Aucun événement n'a  été trouvé pour le magasin " +
+        "Aucun événement n'a été trouvé pour le magasin " +
           currMagasin.nom +
           " à la date du " +
           dateRetrait
@@ -41,10 +53,7 @@ function checkEvents() {
     }
 
     if (eventId && !dateRetrait) {
-      const dateDepot = sheet
-        .getRange(row, TIRELIRE_DEF.DATE_DEPOT.INDEX)
-        .getValue();
-
+      const dateDepot = row[getColumnIndex("TIRELIRE", "DATE_DEPOT")];
       const dateRetraitTheo = new Date(dateDepot);
       dateRetraitTheo.setDate(
         dateRetraitTheo.getDate() + parseInt(currMagasin.delaisRecuperation)
@@ -71,6 +80,7 @@ function checkEvents() {
                 " " +
                 currResponsable.prenom
             );
+
             const formUrl =
               "https://docs.google.com/forms/d/" +
               formID +
@@ -84,6 +94,7 @@ function checkEvents() {
               name: "AMANA",
               noReply: true,
             };
+
             try {
               MailApp.sendEmail(currResponsable.email, subject, body, options);
             } catch (error) {
@@ -99,5 +110,5 @@ function checkEvents() {
         }
       }
     }
-  }
+  });
 }

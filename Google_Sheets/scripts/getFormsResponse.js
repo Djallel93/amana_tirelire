@@ -3,140 +3,114 @@ function getFormsResponse(e) {
 
   console.log("Un formulaire a été soumis");
 
-  const formResponse = e.namedValues;
-  const tirelireSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
-    TIRELIRE_DEF.SHEET_NAME
-  );
-  const tirelireData = tirelireSheet.getDataRange().getValues();
-
+  const formResponses = e.namedValues;
+  const tirelireData = getSheetDataByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
+  const tirelireSheet = getSheetByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
+  const questions = SHEET_DEF.QUESTIONS_FORM;
   let montant = "";
-  const id_event = getCellValue(formResponse, QUESTIONS_FORMULAIRE.ID_EVENT);
+  const id_event = getFormQuestion(formResponses, questions.ID_EVENT);
+  const note = getFormQuestion(formResponses, questions.NOTE_RECUP);
+  const commentaire = getFormQuestion(formResponses, questions.COMM_RECUP);
 
-  const note = getCellValue(formResponse, QUESTIONS_FORMULAIRE.NOTE_RECUP);
-
-  const commentaire = getCellValue(
-    formResponse,
-    QUESTIONS_FORMULAIRE.COMM_RECUP
-  );
-
-  if (getCellValue(formResponse, QUESTIONS_FORMULAIRE.TRANSFERER) === "Non") {
+  if (getFormQuestion(formResponses, questions.TRANSFERER) === "Non") {
     // TODO: Envoyer mail aux admins
     return;
   }
 
-  if (getCellValue(formResponse, QUESTIONS_FORMULAIRE.RECUPEREE) === "Oui") {
+  const cdtRecuperee =
+    getFormQuestion(formResponses, questions.RECUPEREE) === "Oui";
+  const cdtPerdueVolee =
+    getFormQuestion(formResponses, questions.PERDUE_VOLEE) === "Oui";
+  const cdtReprogrammer =
+    getFormQuestion(formResponses, questions.REPROGRAMMER) === "Oui";
+  const cdtTransferer =
+    getFormQuestion(formResponses, questions.TRANSFERER) === "Oui";
+
+  const targetRow = tirelireData.find((row) => {
+    if (row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")] === "") {
+      return row[getColumnIndex("TIRELIRE", "ID_EVENT")] === id_event;
+    }
+    return false;
+  });
+
+  if (!targetRow) {
+    console.error(`Aucun événement trouvé avec l'ID ${id_event}`);
+    return;
+  }
+
+  console.log(
+    `L'événement ${id_event} a été trouvé. Traitement de la réponse...`
+  );
+  const rowIndex = tirelireData.indexOf(targetRow) + 2;
+
+  if (cdtRecuperee) {
     console.log("La tirelire a été récupérée");
-    if (
-      getCellValue(formResponse, QUESTIONS_FORMULAIRE.CONTENU_CONNU) === "Oui"
-    ) {
-      montant = getCellValue(
-        formResponse,
-        QUESTIONS_FORMULAIRE.MONTANT_RECUPERE
-      );
+    if (getFormQuestion(formResponses, questions.CONTENU_CONNU) === "Oui") {
+      montant = getFormQuestion(formResponses, questions.MONTANT_RECUPERE);
     }
-    console.log("Recherche de l'événement " + id_event);
-    for (var i = 1; i < tirelireData.length; i++) {
-      if (tirelireData[i][TIRELIRE_DEF.DATE_RETRAIT.INDEX - 1] === "") {
-        if (tirelireData[i][TIRELIRE_DEF.ID_EVENT.INDEX - 1] === id_event) {
-          console.log("L'événement a été trouvé. Mise à jour des données...");
-          tirelireSheet
-            .getRange(i + 1, TIRELIRE_DEF.RECUPERE.INDEX)
-            .setValue(true);
-          tirelireSheet
-            .getRange(i + 1, TIRELIRE_DEF.MONTANT.INDEX)
-            .setValue(montant);
-          tirelireSheet.getRange(i + 1, TIRELIRE_DEF.NOTE.INDEX).setValue(note);
-          tirelireSheet
-            .getRange(i + 1, TIRELIRE_DEF.COMMENTAIRE.INDEX)
-            .setValue(commentaire);
 
-          getTirelire(
-            tirelireSheet,
-            i + 1,
-            TIRELIRE_DEF.RECUPERE.INDEX,
-            calendar
-          );
-          return;
-        }
-      }
-    }
+    console.log("Mise à jour des données...");
+    tirelireSheet
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "RECUPERE"))
+      .setValue(true);
+    tirelireSheet
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "MONTANT"))
+      .setValue(montant);
+    tirelireSheet
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "NOTE"))
+      .setValue(note);
+    tirelireSheet
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "COMMENTAIRE"))
+      .setValue(commentaire);
+
+    getTirelire(rowIndex, getRealColumnIndex("TIRELIRE", "RECUPERE"), calendar);
+  } else if (cdtPerdueVolee) {
+    console.log("La tirelire a été malheureusement perdu");
+    console.log("Mise à jour des données...");
+    tirelireSheet
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "PERDU"))
+      .setValue(true);
+    tirelireSheet
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "NOTE"))
+      .setValue(note);
+    tirelireSheet
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "COMMENTAIRE"))
+      .setValue(commentaire);
+
+    getTirelire(rowIndex, getRealColumnIndex("TIRELIRE", "PERDU"), calendar);
   } else {
-    if (
-      getCellValue(formResponse, QUESTIONS_FORMULAIRE.PERDUE_VOLEE) === "Oui"
-    ) {
-      console.log("La tirelire a été malheureusement perdu");
-      console.log("Recherche de l'événement " + id_event);
-      for (var i = 1; i < tirelireData.length; i++) {
-        if (tirelireData[i][TIRELIRE_DEF.DATE_RETRAIT.INDEX - 1] === "") {
-          if (tirelireData[i][TIRELIRE_DEF.ID_EVENT.INDEX - 1] === id_event) {
-            console.log("L'événement a été trouvé. Mise à jour des données...");
-            tirelireSheet
-              .getRange(i + 1, TIRELIRE_DEF.PERDU.INDEX)
-              .setValue(true);
-            tirelireSheet
-              .getRange(i + 1, TIRELIRE_DEF.NOTE.INDEX)
-              .setValue(note);
-            tirelireSheet
-              .getRange(i + 1, TIRELIRE_DEF.COMMENTAIRE.INDEX)
-              .setValue(commentaire);
+    const pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+    const newDeadline = new Date(
+      getFormQuestion(formResponses, questions.DATE_REPROGRAMMATION).replace(
+        pattern,
+        "$3-$2-$1"
+      )
+    );
 
-            getTirelire(
-              tirelireSheet,
-              i + 1,
-              TIRELIRE_DEF.PERDU.INDEX,
-              calendar
-            );
-            return;
-          }
-        }
-      }
-    } else {
-      const pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
-      const newDeadline = new Date(
-        getCellValue(
-          formResponse,
-          QUESTIONS_FORMULAIRE.DATE_REPROGRAMMATION
-        ).replace(pattern, "$3-$2-$1")
+    if (cdtReprogrammer) {
+      console.log("Le frère souhaite reprogrammer la récupération");
+      console.log(
+        `Creation de l'événement sur le calendrier à la date du ${newDeadline}`
       );
-      if (
-        getCellValue(formResponse, QUESTIONS_FORMULAIRE.REPROGRAMMER) === "Oui"
-      ) {
-        console.log("Le frère souhaite reprogrammer la récupération");
 
-        console.log(
-          "Creation de l'événement sur le calendrier à la date du " +
-            newDeadline
-        );
+      findAndReScheduleEvent(
+        calendar,
+        id_event,
+        newDeadline
+      );
+    } else if (cdtTransferer) {
+      const newFrere = getFormQuestion(
+        formResponses,
+        questions.FRERE_SELECTIONNE
+      );
+      console.log(`Le frère souhaite transférer la tirelire à ${newFrere}`);
 
-        findAndReScheduleEvent(
-          tirelireSheet,
-          tirelireData,
-          calendar,
-          id_event,
-          newDeadline
-        );
-      } else if (
-        getCellValue(formResponse, QUESTIONS_FORMULAIRE.TRANSFERER) === "Oui"
-      ) {
-        newFrere = getCellValue(
-          formResponse,
-          QUESTIONS_FORMULAIRE.FRERE_SELECTIONNE
-        );
-        console.log("Le frère souhaite transférer la tirelire à " + newFrere);
-
-        transferResponsable(
-          sheet,
-          tirelireData,
-          calendar,
-          id_event,
-          newFrere,
-          newDeadline
-        );
-      }
+      transferResponsable(
+        calendar,
+        id_event,
+        newFrere,
+        newDeadline
+      );
     }
   }
-}
-
-function getCellValue(namedValues, question) {
-  return namedValues[question][0];
 }
