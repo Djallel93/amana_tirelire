@@ -52,26 +52,3 @@ jobs:
           scriptId: ${{ secrets.SCRIPT_ID_GOOGLE_FORMS }}
           command: "push"
           sourceRootDir: ./Google_Forms
-
-      # - name: Install clasp
-      #   id: install-clasp
-      #   run: sudo npm install @google/clasp
-      # - name: Write CLASPRC_JSON secret to .clasprc.json file
-      #   id: write-clasprc
-      #   run: echo "$CLASPRC_JSON_SECRET" >> ~/.clasprc.json
-      #   env:
-      #     CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
-      # - name: Check clasp login status
-      #   id: clasp_login
-      #   run: clasp login --status
-      # - name: Set scriptId in .clasp.json file
-      #   id: set-script-id
-      #   if: ${{ github.event_name	!= 'schedule' && env.SCRIPT_ID }}
-      #   run: jq '.scriptId = "${{env.SCRIPT_ID}}"' .clasp.json >
-      # /tmp/.clasp.json && mv /tmp/.clasp.json .clasp.json
-      #   env:
-      #     SCRIPT_ID: ${{ secrets.SCRIPT_ID }}
-      # - name: Push script to scripts.google.com
-      #   id: clasp-push
-      #   if: ${{ github.event_name	!= 'schedule' }}
-      #   run: clasp push -f

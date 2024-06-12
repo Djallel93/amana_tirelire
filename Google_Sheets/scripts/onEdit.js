@@ -26,11 +26,7 @@ function onEdit(e) {
       "rollbackInProgress",
       "true"
     );
-    noRollbackSetValue(
-      e.range,
-      e.oldValue,
-      getColumnType(sheetName, editedColumn)
-    );
+    noRollbackSetValue(e.range, e.oldValue);
     showAlert(
       "Le frère " +
         userMail +
@@ -42,15 +38,11 @@ function onEdit(e) {
   console.log("Session user: " + userMail);
 
   if (
-    sheetName !== FRERE_DEF.SHEET_NAME &&
+    sheetName !== SHEET_DEF.FRERE.SHEET_NAME &&
     !canEditCells(sheet, editedRow, userMail)
   ) {
     // Annuler la modification si l'utilisateur n'est pas autorisé
-    noRollbackSetValue(
-      e.range,
-      e.oldValue,
-      getColumnType(sheetName, editedColumn)
-    );
+    noRollbackSetValue(e.range, e.oldValue);
     return;
   }
 
@@ -58,8 +50,8 @@ function onEdit(e) {
 
   // Tous les administrateur peuvent modifier n'importe quel responsable
   if (
-    sheetName === TIRELIRE_DEF.SHEET_NAME &&
-    editedColumn === TIRELIRE_DEF.RESPONSABLE.INDEX
+    sheetName === SHEET_DEF.TIRELIRE.SHEET_NAME &&
+    editedColumn === SHEET_DEF.TIRELIRE.COLUMNS.RESPONSABLE.INDEX
   ) {
     if (!canEditResponsable(e, currentUser)) {
       return;
@@ -72,12 +64,15 @@ function onEdit(e) {
       " possède le droit de modifier le champs responsable..."
   );
 
-  if (sheetName === FRERE_DEF.SHEET_NAME && editedRow > 1) {
+  if (sheetName === SHEET_DEF.FRERE.SHEET_NAME && editedRow > 1) {
     updateListeFrere(sheet, editedRow, editedColumn);
   }
 
-  if (sheetName == TIRELIRE_DEF.SHEET_NAME && editedRow > 1) {
-    getTirelire(sheet, editedRow, editedColumn, calendar);
+  if (
+    sheetName === SHEET_DEF.TIRELIRE.SHEET_NAME &&
+    editedRow !== sheet.getLastRow()
+  ) {
+    getTirelire(editedRow, editedColumn, calendar);
   }
 
   PropertiesService.getScriptProperties().setProperty(

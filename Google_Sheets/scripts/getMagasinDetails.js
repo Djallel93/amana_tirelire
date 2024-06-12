@@ -1,21 +1,31 @@
-function getMagasinDetails(nom, magasinData) {
-  for (let i = 1; i < magasinData.length; i++) {
-    if (magasinData[i][MAGASIN_DEF.NOM.INDEX - 1] == nom) {
-      console.log("Le magasin " + nom + " existe dans la feuille magasin");
-      return {
-        nom: magasinData[i][MAGASIN_DEF.NOM.INDEX - 1],
-        adresse: magasinData[i][MAGASIN_DEF.ADRESSE.INDEX - 1],
-        codePostal: magasinData[i][MAGASIN_DEF.CODE_POSTAL.INDEX - 1],
-        ville: magasinData[i][MAGASIN_DEF.VILLE.INDEX - 1],
-        delaisRecuperation:
-          magasinData[i][MAGASIN_DEF.DELAISRECUPERATION.INDEX - 1],
-        telephone: formatNumeroTelephone(
-          magasinData[i][MAGASIN_DEF.TELEPHONE.INDEX - 1]
-        ),
-      };
-    }
+function getMagasinDetails(nom) {
+  if (typeof nom !== "string") {
+    console.error("Paramètres invalides fournis à getMagasinDetails");
+    return null;
   }
-  console.error("Le magasin " + nom + " n'existe pas dans la feuille magasin");
+
+  const magasinData = getSheetDataByName(SHEET_DEF.MAGASIN.SHEET_NAME);
+  const magasinIndex = getColumnIndex("MAGASIN", "NOM");
+  const magasin = magasinData.find(
+    (row) => row[magasinIndex] === nom
+  );
+
+  if (magasin) {
+    console.log(`Le magasin ${nom} existe dans la feuille magasin`);
+    return {
+      nom: magasin[getColumnIndex("MAGASIN", "NOM")],
+      adresse: magasin[getColumnIndex("MAGASIN", "ADRESSE")],
+      codePostal: magasin[getColumnIndex("MAGASIN", "CODE_POSTAL")],
+      ville: magasin[getColumnIndex("MAGASIN", "VILLE")],
+      delaisRecuperation:
+        magasin[getColumnIndex("MAGASIN", "DELAIS_RECUPERATION")],
+      telephone: formatNumeroTelephone(
+        magasin[getColumnIndex("MAGASIN", "TELEPHONE")]
+      ),
+    };
+  }
+
+  console.error(`Le magasin ${nom} n'existe pas dans la feuille magasin`);
   return null;
 }
 

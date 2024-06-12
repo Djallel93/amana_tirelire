@@ -1,20 +1,25 @@
 function createCalendarEvent(sheet, editedRow, calendar, deadline) {
-  const currMagasin = getMagasinDetails(
-    sheet.getRange(editedRow, TIRELIRE_DEF.MAGASIN.INDEX).getValue(),
-    SpreadsheetApp.getActiveSpreadsheet()
-      .getSheetByName(MAGASIN_DEF.SHEET_NAME)
-      .getDataRange()
-      .getValues()
-  );
+  if (!sheet || !calendar || typeof editedRow !== "number") {
+    console.error("Paramètres invalides fournis à createCalendarEvent");
+    return null;
+  }
 
-  const currResponsable = getUserDetailsByName(
-    sheet.getRange(editedRow, TIRELIRE_DEF.RESPONSABLE.INDEX).getValue()
-  );
+  const magasinNom = sheet
+    .getRange(editedRow, getRealColumnIndex("TIRELIRE", "MAGASIN"))
+    .getValue();
+  const responsableNom = sheet
+    .getRange(editedRow, getRealColumnIndex("TIRELIRE", "RESPONSABLE"))
+    .getValue();
+
+  const currMagasin = getMagasinDetails(magasinNom);
+
+  const currResponsable = getUserDetailsByName(responsableNom);
 
   if (!currMagasin) {
     console.error("Impossible de récupérer les informations du magasin");
     return null;
   }
+
   if (!currResponsable) {
     console.error(
       "Impossible de récupérer les informations du responsable de cette tirelire"
@@ -22,10 +27,7 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
     return null;
   }
 
-  if (!deadline) {
-    var deadline = new Date();
-  }
-
+  deadline = deadline || new Date();
   deadline.setDate(
     deadline.getDate() + parseInt(currMagasin.delaisRecuperation)
   );
@@ -71,15 +73,12 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
       .addPopupReminder(10080); // Une semaine avant
 
     console.log("Event ID: " + event.getId());
-  } catch (error) {
-    console.error("La création de l'événement sur le calendrier a échouée: " + error.toString());
-    return null;
-  }
-
-  if (!event) {
-    console.error("Impossible de créer l'événement sur le calendrier");
-    return null;
-  } else {
     return event;
+  } catch (error) {
+    console.error(
+      "La création de l'événement sur le calendrier a échoué: " +
+        error.toString()
+    );
+    return null;
   }
 }

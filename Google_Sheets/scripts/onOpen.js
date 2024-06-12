@@ -13,46 +13,45 @@ function onOpen() {
 }
 
 function initCalendarEvents() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
-    TIRELIRE_DEF.SHEET_NAME
-  );
-  const lastRow = sheet.getLastRow();
+  const sheet = getSheetByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
+  const tirelireData = getSheetDataByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
 
   console.log("Récupération de l'ID du calendrier de l'utilisateur");
   const calendar = CalendarApp.getDefaultCalendar();
+  var rowIndex = 1;
 
-  for (let row = 2; row <= lastRow; row++) {
-    const dateRetrait = sheet
-      .getRange(row, TIRELIRE_DEF.DATE_RETRAIT.INDEX)
-      .getValue();
-
-    const idEvent = sheet.getRange(row, TIRELIRE_DEF.ID_EVENT.INDEX).getValue();
+  for (let row of tirelireData) {
+    rowIndex++;
+    const dateRetrait = row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")];
+    const idEvent = row[getColumnIndex("TIRELIRE", "ID_EVENT")];
 
     if (dateRetrait || idEvent) {
+      console.warn("dateRetrait : " + dateRetrait);
+      console.warn("idEvent : " + idEvent);
+      console.warn("Cette tirelire sera ignorée");
       continue;
     }
 
     const event = createCalendarEvent(
       sheet,
-      row,
+      rowIndex,
       calendar,
-      sheet.getRange(row, TIRELIRE_DEF.DATE_DEPOT.INDEX).getValue()
+      row[getColumnIndex("TIRELIRE", "DATE_DEPOT")]
     );
 
     if (!event) {
       showAlert(
         "Impossible de créer l'événement pour le magasin " +
-          sheet.getRange(row, TIRELIRE_DEF.MAGASIN.INDEX).getValue() +
+          row[getColumnIndex("TIRELIRE", "MAGASIN")] +
           " a la date de dépôt du " +
-          sheet.getRange(row, TIRELIRE_DEF.DATE_DEPOT.INDEX).getValue() +
+          row[getColumnIndex("TIRELIRE", "DATE_DEPOT")] +
           " sur le calendrier."
       );
       return;
     } else {
       noRollbackSetValue(
-        sheet.getRange(row, TIRELIRE_DEF.ID_EVENT.INDEX),
-        event.getId(),
-        TIRELIRE_DEF.ID_EVENT.TYPE
+        sheet.getRange(rowIndex, getRealColumnIndex("TIRELIRE", "ID_EVENT")),
+        event.getId()
       );
     }
   }
@@ -123,7 +122,7 @@ function isIdEventSelected(sheet) {
   }
 
   if (
-    activeCell.getColumn() !== TIRELIRE_DEF.ID_EVENT.INDEX ||
+    activeCell.getColumn() !== SHEET_DEF.TIRELIRE.COLUMNS.ID_EVENT.INDEX ||
     !activeCell.getColumn()
   ) {
     console.error("La cellule sélectionnée n'est pas un id_event valide");

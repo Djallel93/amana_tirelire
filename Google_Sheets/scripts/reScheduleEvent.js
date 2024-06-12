@@ -1,25 +1,25 @@
-function findAndReScheduleEvent(
-  sheet,
-  tirelireData,
-  calendar,
-  id_event,
-  newDeadline
-) {
+function findAndReScheduleEvent(calendar, id_event, newDeadline) {
+  const tirelireData = getSheetDataByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
+  
   console.log("Recherche de l'événement " + id_event);
+  const eventIndex = getColumnIndex("TIRELIRE", "ID_EVENT");
+  const targetRow = tirelireData.find((row) => row[eventIndex] === id_event);
 
-  for (let i = 1; i < tirelireData.length; i++) {
-    if (tirelireData[i][TIRELIRE_DEF.ID_EVENT.INDEX - 1] === id_event) {
-      reScheduleEvent(sheet, i + 1, calendar, id_event, newDeadline);
-      break;
-    }
+  if (targetRow) {
+    const rowIndex = tirelireData.indexOf(targetRow) + 2;
+    reScheduleEvent(rowIndex, calendar, id_event, newDeadline);
+  } else {
+    console.error("Événement non trouvé avec l'ID " + id_event);
   }
 }
 
-function reScheduleEvent(sheet, row, calendar, id_event, newDeadline) {
+function reScheduleEvent(row, calendar, id_event, newDeadline) {
+  const sheet = getSheetByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
+
   console.log("Suppression de l'événement " + id_event);
   const event = CalendarApp.getEventById(id_event);
   event.deleteEvent();
-  sheet.getRange(row, TIRELIRE_DEF.ID_EVENT.INDEX).setValue("");
+  sheet.getRange(row, getRealColumnIndex("TIRELIRE", "ID_EVENT")).setValue("");
 
   console.log("Création du nouvel événement sur le calendrier");
 
@@ -30,8 +30,7 @@ function reScheduleEvent(sheet, row, calendar, id_event, newDeadline) {
       ". Mise à jour de la nouvelle ligne..."
   );
   noRollbackSetValue(
-    sheet.getRange(row, TIRELIRE_DEF.ID_EVENT.INDEX),
-    newEvent.getId(),
-    TIRELIRE_DEF.ID_EVENT.TYPE
+    sheet.getRange(row, getRealColumnIndex("TIRELIRE", "ID_EVENT")),
+    newEvent.getId()
   );
 }
