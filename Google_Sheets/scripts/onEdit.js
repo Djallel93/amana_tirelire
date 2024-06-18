@@ -65,7 +65,7 @@ function onEdit(e) {
   );
 
   if (sheetName === SHEET_DEF.FRERE.SHEET_NAME && editedRow > 1) {
-    updateListeFrere(sheet, editedRow, editedColumn);
+    updateListeFrere();
   }
 
   if (

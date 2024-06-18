@@ -1,11 +1,10 @@
 function updateListeFrere() {
-  const form = FormApp.getActiveForm();
+  const formUrl = SpreadsheetApp.getActiveSpreadsheet().getFormUrl();
+  const form = FormApp.openByUrl(formUrl);
   const QUESTION_TITLE = "Voici la liste des frères disponibles";
 
-  console.log("Récupération du Google Sheets associé");
-  const sheetID = form.getDestinationId();
-
-  const dataRange = getSheetDataByID(sheetID, SHEET_DEF.FRERE.SHEET_NAME);
+  console.log("Récupération des frères depuis le Google Sheets");
+  const dataRange = getSheetDataByName(SHEET_DEF.FRERE.SHEET_NAME);
 
   console.log("Création de la liste des frères");
 
@@ -16,7 +15,7 @@ function updateListeFrere() {
         row[getColumnIndex("FRERE", "NOM")] +
         " " +
         row[getColumnIndex("FRERE", "PRENOM")]
-    )
+    );
 
   if (fullNames.length === 0) fullNames.push("");
 
