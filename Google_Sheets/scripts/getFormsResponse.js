@@ -31,12 +31,7 @@ function getFormsResponse(e) {
       .join(",");
 
     console.log("Récupération des information de la tirelire");
-    const targetRow = tirelireData.find((row) => {
-      if (row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")] === "") {
-        return row[getColumnIndex("TIRELIRE", "ID_EVENT")] === id_event;
-      }
-      return false;
-    });
+    const targetRow = findEventRow(tirelireData, id_event);
 
     if (!targetRow) {
       console.error(`Aucun événement trouvé avec l'ID ${id_event}`);
@@ -88,12 +83,7 @@ function getFormsResponse(e) {
   const cdtTransferer =
     getFormQuestion(formResponses, questions.TRANSFERER) === "Oui";
 
-  const targetRow = tirelireData.find((row) => {
-    if (row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")] === "") {
-      return row[getColumnIndex("TIRELIRE", "ID_EVENT")] === id_event;
-    }
-    return false;
-  });
+  const targetRow = findEventRow(tirelireData, id_event);
 
   if (!targetRow) {
     console.error(`Aucun événement trouvé avec l'ID ${id_event}`);
@@ -166,4 +156,12 @@ function getFormsResponse(e) {
       transferResponsable(calendar, id_event, newFrere, newDeadline);
     }
   }
+}
+
+function findEventRow(tirelireData, id_event) {
+  return tirelireData.find(
+    (row) =>
+      row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")] === "" &&
+      row[getColumnIndex("TIRELIRE", "ID_EVENT")] === id_event
+  );
 }
