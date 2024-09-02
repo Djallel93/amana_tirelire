@@ -1,14 +1,12 @@
-function getMagasinDetails(nom) {
-  if (typeof nom !== "string") {
+function getMagasinDetails(id) {
+  if (typeof id !== "number") {
     console.error("Paramètres invalides fournis à getMagasinDetails");
     return null;
   }
 
   const magasinData = getSheetDataByName(SHEET_DEF.MAGASIN.SHEET_NAME);
-  const magasinIndex = getColumnIndex("MAGASIN", "NOM");
-  const magasin = magasinData.find(
-    (row) => row[magasinIndex] === nom
-  );
+  const magasinIndex = getColumnIndex("MAGASIN", "ID");
+  const magasin = magasinData.find((row) => row[magasinIndex] === id);
 
   if (magasin) {
     console.log(`Le magasin ${nom} existe dans la feuille magasin`);
