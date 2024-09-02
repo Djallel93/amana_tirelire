@@ -12,7 +12,7 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.129.1229.0 (24.05)"
+        "value": "2.132.1053.0 (24.08)"
       },
       {
         "name": "PBI_ProTooling",
@@ -69,13 +69,6 @@
         "fromTable": "tirelire",
         "toColumn": "nom",
         "toTable": "magasins"
-      },
-      {
-        "name": "4cc84bc6-90ff-dad6-ef20-484f7ea84891",
-        "fromColumn": "responsable ",
-        "fromTable": "tirelire",
-        "toColumn": "nom_prenom",
-        "toTable": "frere"
       }
     ],
     "sourceQueryCulture": "fr-FR",
@@ -674,7 +667,7 @@
             "source": {
               "expression": [
                 "let",
-                "    Source = GoogleSheets.Contents(\"https://docs.google.com/spreadsheets/d/12vU-UwntsirFpH03dfijqU7SZ2VSaWiqXRCzGl0Fc5E/edit?usp=drive_link\"),",
+                "    Source = GoogleSheets.Contents(\"https://docs.google.com/spreadsheets/d/1s3dJF7pc32ycDYePRNaLAP4P5Ed6MFTWFBkcTTq_xNA/edit?usp=drive_link\"),",
                 "    frere_Table = Source{[name=\"frere\",ItemKind=\"Table\"]}[Data],",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(frere_Table, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"nom\", type text}, {\"prenom\", type text}, {\"mail\", type text}, {\"telephone\", type text}, {\"groupe\", type text}}),",
@@ -807,7 +800,7 @@
             "source": {
               "expression": [
                 "let",
-                "    Source = GoogleSheets.Contents(\"https://docs.google.com/spreadsheets/d/12vU-UwntsirFpH03dfijqU7SZ2VSaWiqXRCzGl0Fc5E/edit?usp=drive_link\"),",
+                "    Source = GoogleSheets.Contents(\"https://docs.google.com/spreadsheets/d/1s3dJF7pc32ycDYePRNaLAP4P5Ed6MFTWFBkcTTq_xNA/edit?usp=drive_link\"),",
                 "    magasins_Table = Source{[name=\"magasin\",ItemKind=\"Table\"]}[Data],",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(magasins_Table, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"nom\", type text}, {\"type\", type any}, {\"adresse\", type text}, {\"quartier\", type text}, {\"code postal\", Int64.Type}, {\"ville\", type text}, {\"telephone\", type text}, {\"delais recuperation\", Int64.Type}}),",
@@ -916,19 +909,6 @@
             "summarizeBy": "sum"
           },
           {
-            "name": "responsable ",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ],
-            "dataType": "string",
-            "lineageTag": "861b81cb-d493-4504-9176-0eb06ee82ad5",
-            "sourceColumn": "responsable ",
-            "summarizeBy": "none"
-          },
-          {
             "name": "jours_depot",
             "annotations": [
               {
@@ -994,12 +974,12 @@
             "source": {
               "expression": [
                 "let",
-                "    Source = GoogleSheets.Contents(\"https://docs.google.com/spreadsheets/d/12vU-UwntsirFpH03dfijqU7SZ2VSaWiqXRCzGl0Fc5E/edit?usp=drive_link\"),",
+                "    Source = GoogleSheets.Contents(\"https://docs.google.com/spreadsheets/d/1s3dJF7pc32ycDYePRNaLAP4P5Ed6MFTWFBkcTTq_xNA/edit?usp=drive_link\"),",
                 "    tirelire_Table = Source{[name=\"tirelire\",ItemKind=\"Table\"]}[Data],",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(tirelire_Table, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"magasin\", type text}, {\"date_depot\", type date}, {\"date_retrait\", type date}, {\"montant\", Currency.Type}, {\"responsable \", type text}, {\"recupere\", type logical}, {\"perdu\", type logical}}),",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"magasin\", type text}, {\"date_depot\", type date}, {\"date_retrait\", type date}, {\"montant\", Currency.Type}, {\"recupere\", type logical}, {\"perdu\", type logical}}),",
                 "    #\"Filtered Rows\" = Table.SelectRows(#\"Changed Type\", each [magasin] <> null and [magasin] <> \"\"),",
-                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Filtered Rows\",{\"responsable \", \"perdu\", \"recupere\", \"montant\", \"date_retrait\", \"date_depot\", \"magasin\"})",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(#\"Filtered Rows\",{\"perdu\", \"recupere\", \"montant\", \"date_retrait\", \"date_depot\", \"magasin\"})",
                 "in",
                 "    #\"Removed Other Columns\""
               ],
