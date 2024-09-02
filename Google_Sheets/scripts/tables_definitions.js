@@ -12,14 +12,16 @@ const SHEET_DEF = {
   MAGASIN: {
     SHEET_NAME: "magasin",
     COLUMNS: {
-      NOM: { INDEX: 1, TYPE: "string" },
-      ADRESSE: { INDEX: 2, TYPE: "string" },
-      QUARTIER: { INDEX: 3, TYPE: "string" },
-      CODE_POSTAL: { INDEX: 4, TYPE: "number" },
-      VILLE: { INDEX: 5, TYPE: "string" },
-      TYPE: { INDEX: 6, TYPE: "string" },
-      DELAIS_RECUPERATION: { INDEX: 7, TYPE: "number" },
-      TELEPHONE: { INDEX: 8, TYPE: "string" },
+      ID: { INDEX: 1, TYPE: "number" },
+      NOM: { INDEX: 2, TYPE: "string" },
+      ADRESSE: { INDEX: 3, TYPE: "string" },
+      QUARTIER: { INDEX: 4, TYPE: "string" },
+      CODE_POSTAL: { INDEX: 5, TYPE: "number" },
+      VILLE: { INDEX: 6, TYPE: "string" },
+      TYPE: { INDEX: 7, TYPE: "string" },
+      DELAIS_RECUPERATION: { INDEX: 8, TYPE: "number" },
+      TELEPHONE: { INDEX: 9, TYPE: "string" },
+      QR_CODE: { INDEX: 10, TYPE: "string" }, // image
     },
   },
   TIRELIRE: {
@@ -39,6 +41,10 @@ const SHEET_DEF = {
   },
   QUESTIONS_FORM: {
     HORODATEUR: "Horodateur",
+    EMAIL: "Adresse e-mail",
+    PASSWORD: "Veuillez saisir le mot de passe",
+    ACTION: "Que voulez vous faire ?",
+    ID_MAGASIN: "Quel est l'ID de votre magasin ?",
     RECUPEREE: "Avez vous réussi a récupérer la tirelire",
     PERDUE_VOLEE: "La tirelire a-t-elle était perdue/volée ?",
     REPROGRAMMER:
@@ -46,15 +52,10 @@ const SHEET_DEF = {
     TRANSFERER: "Souhaitez vous transférer la tirelire a un autre frère ?",
     FRERE_SELECTIONNE: "Voici la liste des frères disponibles",
     DATE_REPROGRAMMATION: "Pour quand voulez vous reprogrammer votre passage ?",
-    CONTENU_CONNU: "Savez vous combien contenait la tirelire ?",
-    MONTANT_RECUPERE: "Veuillez saisir le montant récupéré",
-    EMAIL: "Adresse e-mail",
-    ID_EVENT: "Quel est l'ID de l'évènement sur Google Calendar ?",
     NOTE_RECUP: "Comment s'est passé la récupération de la tirelire",
     COMM_RECUP: "Laisser un commentaire ?",
   },
 };
-
 
 const SHEET_QUESTIONS_FORM = {
   HORODATEUR: "Horodateur",
@@ -82,7 +83,9 @@ function getSheetDataByName(sheetName) {
 }
 
 function getSheetDataByID(sheetID, sheetName) {
-  const sheet = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName.trim());
+  const sheet = SpreadsheetApp.openById(sheetID).getSheetByName(
+    sheetName.trim()
+  );
   return sheet.getDataRange().getValues().slice(1);
 }
 
