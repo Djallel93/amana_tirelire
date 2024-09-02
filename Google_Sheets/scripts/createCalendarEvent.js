@@ -4,14 +4,14 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
     return null;
   }
 
-  const magasinNom = sheet
-    .getRange(editedRow, getRealColumnIndex("TIRELIRE", "MAGASIN"))
+  const idMagasin = sheet
+    .getRange(editedRow, getRealColumnIndex("TIRELIRE", "ID_MAGASIN"))
     .getValue();
   const responsableNom = sheet
     .getRange(editedRow, getRealColumnIndex("TIRELIRE", "RESPONSABLE"))
     .getValue();
 
-  const currMagasin = getMagasinDetails(magasinNom);
+  const currMagasin = getMagasinDetails(idMagasin);
 
   const currResponsable = getUserDetailsByName(responsableNom);
 

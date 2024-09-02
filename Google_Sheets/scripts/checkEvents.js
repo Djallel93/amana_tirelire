@@ -19,13 +19,13 @@ function checkEvents() {
   rows.forEach((row) => {
     const eventId = row[getColumnIndex("TIRELIRE", "ID_EVENT")];
     const dateRetrait = row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")];
-    const magasinNom = row[getColumnIndex("TIRELIRE", "MAGASIN")];
+    const idMagasin = row[getColumnIndex("TIRELIRE", "ID_MAGASIN")];
     const responsableNom = row[getColumnIndex("TIRELIRE", "RESPONSABLE")];
 
-    const currMagasin = getMagasinDetails(magasinNom);
+    const currMagasin = getMagasinDetails(idMagasin);
     if (!currMagasin) {
       console.error(
-        "Impossible de récupérer les informations du magasin : " + magasinNom
+        "Impossible de récupérer les informations du magasin : " + idMagasin
       );
       return;
     }

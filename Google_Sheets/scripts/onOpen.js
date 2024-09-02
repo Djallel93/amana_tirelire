@@ -42,7 +42,7 @@ function initCalendarEvents() {
     if (!event) {
       showAlert(
         "Impossible de créer l'événement pour le magasin " +
-          row[getColumnIndex("TIRELIRE", "MAGASIN")] +
+          row[getColumnIndex("TIRELIRE", "ID_MAGASIN")] +
           " a la date de dépôt du " +
           row[getColumnIndex("TIRELIRE", "DATE_DEPOT")] +
           " sur le calendrier."

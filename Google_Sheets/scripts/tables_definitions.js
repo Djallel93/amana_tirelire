@@ -27,7 +27,7 @@ const SHEET_DEF = {
   TIRELIRE: {
     SHEET_NAME: "tirelire",
     COLUMNS: {
-      MAGASIN: { INDEX: 1, TYPE: "string" },
+      ID_MAGASIN: { INDEX: 1, TYPE: "number" },
       DATE_DEPOT: { INDEX: 2, TYPE: "date" },
       DATE_RETRAIT: { INDEX: 3, TYPE: "date" },
       MONTANT: { INDEX: 4, TYPE: "number" },

@@ -8,12 +8,18 @@ function getFormsResponse(e) {
   const tirelireData = getSheetDataByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
   const questions = SHEET_DEF.QUESTIONS_FORM;
 
-  const id_event = getFormQuestion(formResponses, questions.ID_EVENT);
+  const id_magasin = getFormQuestion(formResponses, questions.ID_MAGASIN);
   const note = getFormQuestion(formResponses, questions.NOTE_RECUP);
   const commentaire = getFormQuestion(formResponses, questions.COMM_RECUP);
   const currResponsableMail = getFormQuestion(formResponses, questions.EMAIL);
 
-  let montant = "";
+  console.log("Récupération des information de la tirelire");
+  const targetRow = findEventRow(tirelireData, id_magasin);
+
+  if (!targetRow) {
+    console.error("Aucune tirelire n'a été déposée pour ce magasin");
+    return;
+  }
 
   if (getFormQuestion(formResponses, questions.TRANSFERER) === "Non") {
     console.warn("Le frère est dans l'incapacité de récupérer sa tirelire");
@@ -30,20 +36,10 @@ function getFormsResponse(e) {
       .map((row) => row[getColumnIndex("FRERE", "MAIL")])
       .join(",");
 
-    console.log("Récupération des information de la tirelire");
-    const targetRow = findEventRow(tirelireData, id_event);
-
-    if (!targetRow) {
-      console.error(`Aucun événement trouvé avec l'ID ${id_event}`);
-      return;
-    }
-
-    console.log(
-      `L'événement ${id_event} a été trouvé. Traitement de la réponse...`
-    );
+    console.log("La tirelire existe. Traitement de la réponse...");
     const rowIndex = tirelireData.indexOf(targetRow) + 2;
     const currMagasin = tirelireSheet
-      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "MAGASIN"))
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "ID_MAGASIN"))
       .getValue();
     const currentUser = getUserDetailsByMail(currResponsableMail);
 
@@ -74,6 +70,8 @@ function getFormsResponse(e) {
     return;
   }
 
+  const cdtDeposee =
+    getFormQuestion(formResponses, questions.ACTION) === "Déposer une tirelire";
   const cdtRecuperee =
     getFormQuestion(formResponses, questions.RECUPEREE) === "Oui";
   const cdtPerdueVolee =
@@ -83,31 +81,23 @@ function getFormsResponse(e) {
   const cdtTransferer =
     getFormQuestion(formResponses, questions.TRANSFERER) === "Oui";
 
-  const targetRow = findEventRow(tirelireData, id_event);
-
-  if (!targetRow) {
-    console.error(`Aucun événement trouvé avec l'ID ${id_event}`);
-    return;
-  }
-
   console.log(
     `L'événement ${id_event} a été trouvé. Traitement de la réponse...`
   );
   const rowIndex = tirelireData.indexOf(targetRow) + 2;
+  if (cdtDeposee) {
+    console.log("Une nouvelle tirelire a été déposée");
+    console.log("Mise à jour des données...");
 
-  if (cdtRecuperee) {
+    depotTirelire(tirelireSheet, id_magasin, calendar);
+
+  } else if (cdtRecuperee) {
     console.log("La tirelire a été récupérée");
-    if (getFormQuestion(formResponses, questions.CONTENU_CONNU) === "Oui") {
-      montant = getFormQuestion(formResponses, questions.MONTANT_RECUPERE);
-    }
 
     console.log("Mise à jour des données...");
     tirelireSheet
       .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "RECUPERE"))
       .setValue(true);
-    tirelireSheet
-      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "MONTANT"))
-      .setValue(montant);
     tirelireSheet
       .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "NOTE"))
       .setValue(note);
@@ -158,10 +148,10 @@ function getFormsResponse(e) {
   }
 }
 
-function findEventRow(tirelireData, id_event) {
+function findEventRow(tirelireData, id_magasin) {
   return tirelireData.find(
     (row) =>
       row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")] === "" &&
-      row[getColumnIndex("TIRELIRE", "ID_EVENT")] === id_event
+      row[getColumnIndex("TIRELIRE", "ID_MAGASIN")] === id_magasin
   );
 }
