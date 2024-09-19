@@ -9,7 +9,7 @@ function getMagasinDetails(id) {
   const magasin = magasinData.find((row) => row[magasinIndex] === id);
 
   if (magasin) {
-    console.log(`Le magasin ${nom} existe dans la feuille magasin`);
+    console.log(`Le magasin ${id} existe dans la feuille magasin`);
     return {
       nom: magasin[getColumnIndex("MAGASIN", "NOM")],
       adresse: magasin[getColumnIndex("MAGASIN", "ADRESSE")],
@@ -23,7 +23,7 @@ function getMagasinDetails(id) {
     };
   }
 
-  console.error(`Le magasin ${nom} n'existe pas dans la feuille magasin`);
+  console.error(`Le magasin ${id} n'existe pas dans la feuille magasin`);
   return null;
 }
 

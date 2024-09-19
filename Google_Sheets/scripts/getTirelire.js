@@ -55,6 +55,10 @@ function getTirelire(editedRow, editedColumn, calendar) {
   }
 
   depotOldTirelire(tirelireSheet, editedRow, calendar);
+
+  sheet
+    .getRange(editedRow, getRealColumnIndex("TIRELIRE", "ID_EVENT"))
+    .setValue("");
 }
 
 function exclusiveSelect(
@@ -69,7 +73,7 @@ function exclusiveSelect(
     .getValue();
   const perduValue = tirelireSheet.getRange(editedRow, indexPerdu).getValue();
 
-  console.log("Verification de l’exclusivité des colonnes perdu et récupéré");
+  console.log("Verification de l'exclusivité des colonnes perdu et récupéré");
 
   if (recupereValue && perduValue) {
     if (editedColumn === indexRecupere) {

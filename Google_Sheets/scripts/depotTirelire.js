@@ -3,6 +3,9 @@ function depotOldTirelire(sheet, editedRow, calendar) {
   const id_magasin = sheet
     .getRange(editedRow, getRealColumnIndex("TIRELIRE", "ID_MAGASIN"))
     .getValue();
+  const responsable = sheet
+    .getRange(editedRow, getRealColumnIndex("TIRELIRE", "RESPONSABLE"))
+    .getValue();
 
   // Mise à jour la date_retrait avec la date d'aujourd'hui
   noRollbackSetValue(
@@ -10,14 +13,10 @@ function depotOldTirelire(sheet, editedRow, calendar) {
     currentDate
   );
 
-  depotTirelire(sheet, editedRow, id_magasin, calendar);
+  depotTirelire(sheet, editedRow, id_magasin, responsable, calendar);
 }
 
-function depotTirelire(sheet, id_magasin, calendar) {
-  depotTirelire(sheet, 1, id_magasin, calendar);
-}
-
-function depotTirelire(sheet, refRow, id_magasin, calendar) {
+function depotTirelire(sheet, refRow, id_magasin, responsable, calendar) {
   const newRow = sheet.getLastRow() + 1;
   const currentDate = new Date();
 
@@ -37,6 +36,10 @@ function depotTirelire(sheet, refRow, id_magasin, calendar) {
   noRollbackSetValue(
     sheet.getRange(newRow, getRealColumnIndex("TIRELIRE", "ID_MAGASIN")),
     id_magasin
+  );
+  noRollbackSetValue(
+    sheet.getRange(newRow, getRealColumnIndex("TIRELIRE", "RESPONSABLE")),
+    responsable
   );
 
   // Vider les colonnes de la nouvelle ligne
@@ -66,7 +69,7 @@ function depotTirelire(sheet, refRow, id_magasin, calendar) {
   );
 
   // Creation de l'événement sur le calendrier
-  const event = createCalendarEvent(sheet, editedRow, calendar);
+  const event = createCalendarEvent(sheet, newRow, calendar);
   console.log(
     "Événement crée avec succès. Mise à jour de la nouvelle ligne : " + newRow
   );
@@ -74,7 +77,4 @@ function depotTirelire(sheet, refRow, id_magasin, calendar) {
     sheet.getRange(newRow, getRealColumnIndex("TIRELIRE", "ID_EVENT")),
     event.getId()
   );
-  sheet
-    .getRange(editedRow, getRealColumnIndex("TIRELIRE", "ID_EVENT"))
-    .setValue("");
 }

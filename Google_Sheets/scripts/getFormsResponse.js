@@ -1,7 +1,7 @@
 function getFormsResponse(e) {
-  const calendar = CalendarApp.getDefaultCalendar();
-
   console.log("Un formulaire a été soumis");
+
+  const calendar = CalendarApp.getDefaultCalendar();
 
   const formResponses = e.namedValues;
   const tirelireSheet = getSheetByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
@@ -13,16 +13,25 @@ function getFormsResponse(e) {
   const commentaire = getFormQuestion(formResponses, questions.COMM_RECUP);
   const currResponsableMail = getFormQuestion(formResponses, questions.EMAIL);
 
-  console.log("Récupération des information de la tirelire");
-  const targetRow = findEventRow(tirelireData, id_magasin);
+  const currentUser = getUserDetailsByMail(currResponsableMail);
 
-  if (!targetRow) {
-    console.error("Aucune tirelire n'a été déposée pour ce magasin");
+  if (!currentUser) {
+    console.error(
+      "Utilisateur actuel non trouvé pour l'e-mail : " + currResponsableMail
+    );
     return;
   }
 
+  console.log("Récupération des information de la tirelire");
+  const targetRow = findEventRow(tirelireData, id_magasin);
+
   if (getFormQuestion(formResponses, questions.TRANSFERER) === "Non") {
     console.warn("Le frère est dans l'incapacité de récupérer sa tirelire");
+
+    if (!targetRow) {
+      console.error("Aucune tirelire n'a été déposée pour ce magasin");
+      return;
+    }
 
     const frereData = getSheetDataByName(SHEET_DEF.FRERE.SHEET_NAME);
     console.log("Récupération de la liste des administrateurs à notifier");
@@ -41,14 +50,6 @@ function getFormsResponse(e) {
     const currMagasin = tirelireSheet
       .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "ID_MAGASIN"))
       .getValue();
-    const currentUser = getUserDetailsByMail(currResponsableMail);
-
-    if (!currentUser) {
-      console.error(
-        "Utilisateur actuel non trouvé pour l'e-mail : " + currResponsableMail
-      );
-      return;
-    }
 
     const subject = "Tirelire du magasin " + currMagasin;
     const body =
@@ -80,17 +81,17 @@ function getFormsResponse(e) {
     getFormQuestion(formResponses, questions.REPROGRAMMER) === "Oui";
   const cdtTransferer =
     getFormQuestion(formResponses, questions.TRANSFERER) === "Oui";
-
-  console.log(
-    `L'événement ${id_event} a été trouvé. Traitement de la réponse...`
-  );
   const rowIndex = tirelireData.indexOf(targetRow) + 2;
+
   if (cdtDeposee) {
     console.log("Une nouvelle tirelire a été déposée");
     console.log("Mise à jour des données...");
 
-    depotTirelire(tirelireSheet, id_magasin, calendar);
-
+    const fullName = currentUser.nom + " " + currentUser.prenom;
+    depotTirelire(tirelireSheet, 2, id_magasin, fullName, calendar);
+  } else if (!targetRow) {
+    console.error("Aucune tirelire n'a été déposée pour ce magasin");
+    return;
   } else if (cdtRecuperee) {
     console.log("La tirelire a été récupérée");
 
@@ -128,6 +129,9 @@ function getFormsResponse(e) {
         "$3-$2-$1"
       )
     );
+    const id_event = tirelireSheet
+      .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "ID_EVENT"))
+      .getValue();
 
     if (cdtReprogrammer) {
       console.log("Le frère souhaite reprogrammer la récupération");
@@ -152,6 +156,7 @@ function findEventRow(tirelireData, id_magasin) {
   return tirelireData.find(
     (row) =>
       row[getColumnIndex("TIRELIRE", "DATE_RETRAIT")] === "" &&
-      row[getColumnIndex("TIRELIRE", "ID_MAGASIN")] === id_magasin
+      row[getColumnIndex("TIRELIRE", "ID_MAGASIN")] == id_magasin
   );
+  // Ajouter un filtre pour ne garder que le magasin avec la date de dépôt la plus récente
 }
