@@ -13,19 +13,33 @@ function depotOldTirelire(sheet, editedRow, typeNewTirelire, calendar) {
     currentDate
   );
 
-  depotTirelire(sheet, editedRow, id_magasin, responsable, typeNewTirelire, calendar);
+  depotTirelire(
+    sheet,
+    editedRow,
+    id_magasin,
+    responsable,
+    typeNewTirelire,
+    calendar
+  );
 }
 /**
  * @sheet feuille en cours d'utilisation
- * @refRow {number} Ligne reference a dupliquer. 
- * Pour un premier dépôt elle copie la deuxième ligne. 
+ * @refRow {number} Ligne reference a dupliquer.
+ * Pour un premier dépôt elle copie la deuxième ligne.
  * Sinon, copier la ligne de la tirelire qui vient d'être récupérée
  * @id_magasin {number} id du magasin dans lequel la tirelire est déposée
  * @responsable {string} Nom complet du responsable de la tirelire
  * @typeTirelire {boolean} ouvrable ou non
  * @calendar instance du calendar pour créer un événement
  */
-function depotTirelire(sheet, refRow, id_magasin, responsable, typeTirelire, calendar) {
+function depotTirelire(
+  sheet,
+  refRow,
+  id_magasin,
+  responsable,
+  typeTirelire,
+  calendar
+) {
   const newRow = sheet.getLastRow() + 1;
   const currentDate = new Date();
 
@@ -83,11 +97,15 @@ function depotTirelire(sheet, refRow, id_magasin, responsable, typeTirelire, cal
 
   // Creation de l'événement sur le calendrier
   const event = createCalendarEvent(sheet, newRow, calendar);
-  console.log(
-    "Événement crée avec succès. Mise à jour de la nouvelle ligne : " + newRow
-  );
-  noRollbackSetValue(
-    sheet.getRange(newRow, getRealColumnIndex("TIRELIRE", "ID_EVENT")),
-    event.getId()
-  );
+  if (!event) {
+    console.log("Impossible de créer l'événement");
+  } else {
+    console.log(
+      "Événement crée avec succès. Mise à jour de la nouvelle ligne : " + newRow
+    );
+    noRollbackSetValue(
+      sheet.getRange(newRow, getRealColumnIndex("TIRELIRE", "ID_EVENT")),
+      event.getId()
+    );
+  }
 }
