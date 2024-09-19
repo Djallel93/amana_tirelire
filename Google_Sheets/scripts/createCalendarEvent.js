@@ -13,19 +13,25 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
 
   const currMagasin = getMagasinDetails(idMagasin);
 
-  const currResponsable = getUserDetailsByName(responsableNom);
+  const currTirelireResponsable = getUserDetailsByName(responsableNom);
 
   if (!currMagasin) {
     console.error("Impossible de récupérer les informations du magasin");
     return null;
   }
 
-  if (!currResponsable) {
+  if (!currTirelireResponsable) {
     console.error(
       "Impossible de récupérer les informations du responsable de cette tirelire"
     );
     return null;
   }
+  const currMagasinResponsable = getUserDetailsByName(currMagasin.responsable);
+
+  const listDestinataires = [
+    currTirelireResponsable.email,
+    currMagasinResponsable.email,
+  ];
 
   deadline = deadline || new Date();
   deadline.setDate(
@@ -61,7 +67,7 @@ function createCalendarEvent(sheet, editedRow, calendar, deadline) {
       currMagasin.codePostal +
       ", " +
       currMagasin.ville,
-    guests: currResponsable.email,
+    guests: listDestinataires.join(","),
   };
 
   console.log("Création de l'événement en cours...");
