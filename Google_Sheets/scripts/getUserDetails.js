@@ -4,10 +4,11 @@ function getUserDetailsByMail(email) {
     return null;
   }
 
+  const newEmail = email.trim().toLowerCase();
   const frereData = getSheetDataByName(SHEET_DEF.FRERE.SHEET_NAME);
 
   const mailIndex = getColumnIndex("FRERE", "MAIL");
-  const frere = frereData.find((row) => row[mailIndex] === email);
+  const frere = frereData.find((row) => row[mailIndex] === newEmail);
 
   if (frere) {
     console.log(`Le frère ${email} existe dans la liste des utilisateurs`);

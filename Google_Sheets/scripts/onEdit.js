@@ -18,7 +18,7 @@ function onEdit(e) {
   const sheetName = sheet.getName();
   const editedRow = e.range.getRow();
   const editedColumn = e.range.getColumn();
-  const userMail = e.user;
+  const userMail = String(e.user);
   const currentUser = getUserDetailsByMail(userMail);
 
   if (!currentUser) {
