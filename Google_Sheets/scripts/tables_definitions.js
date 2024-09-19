@@ -19,10 +19,11 @@ const SHEET_DEF = {
       CODE_POSTAL: { INDEX: 5, TYPE: "number" },
       VILLE: { INDEX: 6, TYPE: "string" },
       TYPE: { INDEX: 7, TYPE: "string" },
-      RESPONSABLE: { INDEX: 8, TYPE: "string" },
-      DELAIS_RECUPERATION: { INDEX: 9, TYPE: "number" },
-      TELEPHONE: { INDEX: 10, TYPE: "string" },
-      QR_CODE: { INDEX: 11, TYPE: "string" }, // image
+      POSSEDE_TIRELIRE: { INDEX: 8, TYPE: "boolean" },
+      RESPONSABLE: { INDEX: 9, TYPE: "string" },
+      DELAIS_RECUPERATION: { INDEX: 10, TYPE: "number" },
+      TELEPHONE: { INDEX: 11, TYPE: "string" },
+      QR_CODE: { INDEX: 12, TYPE: "string" }, // image
     },
   },
   TIRELIRE: {
@@ -48,7 +49,8 @@ const SHEET_DEF = {
     ACTION: "Que voulez vous faire ?",
     ID_MAGASIN: "Quel est l'ID de votre magasin ?",
     RECUPEREE: "Avez vous réussi a récupérer la tirelire",
-    OUVRABLE: "La tirelire que vous vous apprêtez à déposer est-elle ouvrable ?",
+    OUVRABLE:
+      "La tirelire que vous vous apprêtez à déposer est-elle ouvrable ?",
     PERDUE_VOLEE: "La tirelire a-t-elle était perdue/volée ?",
     REPROGRAMMER:
       "Souhaitez vous reprogrammer la récupération de votre tirelire ?",
