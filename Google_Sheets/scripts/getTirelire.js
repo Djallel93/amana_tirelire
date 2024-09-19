@@ -1,4 +1,4 @@
-function getTirelire(editedRow, editedColumn, calendar) {
+function getTirelire(editedRow, editedColumn, typeNewTirelire, calendar) {
   const tirelireSheet = getSheetByName(SHEET_DEF.TIRELIRE.SHEET_NAME);
   const cellValue = tirelireSheet.getRange(editedRow, editedColumn).getValue();
 
@@ -54,7 +54,7 @@ function getTirelire(editedRow, editedColumn, calendar) {
     return;
   }
 
-  depotOldTirelire(tirelireSheet, editedRow, calendar);
+  depotOldTirelire(tirelireSheet, editedRow, typeNewTirelire, calendar);
 
   sheet
     .getRange(editedRow, getRealColumnIndex("TIRELIRE", "ID_EVENT"))

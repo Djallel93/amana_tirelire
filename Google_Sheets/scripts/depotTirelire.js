@@ -1,4 +1,4 @@
-function depotOldTirelire(sheet, editedRow, calendar) {
+function depotOldTirelire(sheet, editedRow, typeNewTirelire, calendar) {
   const currentDate = new Date();
   const id_magasin = sheet
     .getRange(editedRow, getRealColumnIndex("TIRELIRE", "ID_MAGASIN"))
@@ -13,10 +13,19 @@ function depotOldTirelire(sheet, editedRow, calendar) {
     currentDate
   );
 
-  depotTirelire(sheet, editedRow, id_magasin, responsable, calendar);
+  depotTirelire(sheet, editedRow, id_magasin, responsable, typeNewTirelire, calendar);
 }
-
-function depotTirelire(sheet, refRow, id_magasin, responsable, calendar) {
+/**
+ * @sheet feuille en cours d'utilisation
+ * @refRow {number} Ligne reference a dupliquer. 
+ * Pour un premier dépôt elle copie la deuxième ligne. 
+ * Sinon, copier la ligne de la tirelire qui vient d'être récupérée
+ * @id_magasin {number} id du magasin dans lequel la tirelire est déposée
+ * @responsable {string} Nom complet du responsable de la tirelire
+ * @typeTirelire {boolean} ouvrable ou non
+ * @calendar instance du calendar pour créer un événement
+ */
+function depotTirelire(sheet, refRow, id_magasin, responsable, typeTirelire, calendar) {
   const newRow = sheet.getLastRow() + 1;
   const currentDate = new Date();
 
@@ -36,6 +45,10 @@ function depotTirelire(sheet, refRow, id_magasin, responsable, calendar) {
   noRollbackSetValue(
     sheet.getRange(newRow, getRealColumnIndex("TIRELIRE", "ID_MAGASIN")),
     id_magasin
+  );
+  noRollbackSetValue(
+    sheet.getRange(newRow, getRealColumnIndex("TIRELIRE", "OUVRABLE")),
+    typeTirelire
   );
   noRollbackSetValue(
     sheet.getRange(newRow, getRealColumnIndex("TIRELIRE", "RESPONSABLE")),

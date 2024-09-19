@@ -15,6 +15,7 @@ function getMagasinDetails(id) {
       adresse: magasin[getColumnIndex("MAGASIN", "ADRESSE")],
       codePostal: magasin[getColumnIndex("MAGASIN", "CODE_POSTAL")],
       ville: magasin[getColumnIndex("MAGASIN", "VILLE")],
+      responsable: magasin[getColumnIndex("MAGASIN", "RESPONSABLE")],
       delaisRecuperation:
         magasin[getColumnIndex("MAGASIN", "DELAIS_RECUPERATION")],
       telephone: formatNumeroTelephone(

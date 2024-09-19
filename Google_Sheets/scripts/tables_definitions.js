@@ -88,5 +88,5 @@ function getColumnType(sheetName, columnName) {
 }
 
 function getFormQuestion(namedValues, question) {
-  return namedValues[question][0];
+  return namedValues[question][0].trim();
 }

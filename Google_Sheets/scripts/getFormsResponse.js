@@ -81,6 +81,8 @@ function getFormsResponse(e) {
     getFormQuestion(formResponses, questions.REPROGRAMMER) === "Oui";
   const cdtTransferer =
     getFormQuestion(formResponses, questions.TRANSFERER) === "Oui";
+  const typeTirelire =
+    getFormQuestion(formResponses, questions.OUVRABLE) === "Oui";
   const rowIndex = tirelireData.indexOf(targetRow) + 2;
 
   if (cdtDeposee) {
@@ -106,7 +108,7 @@ function getFormsResponse(e) {
       .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "COMMENTAIRE"))
       .setValue(commentaire);
 
-    getTirelire(rowIndex, getRealColumnIndex("TIRELIRE", "RECUPERE"), calendar);
+    getTirelire(rowIndex, getRealColumnIndex("TIRELIRE", "RECUPERE"), typeTirelire, calendar);
   } else if (cdtPerdueVolee) {
     console.log("La tirelire a été malheureusement perdu");
     console.log("Mise à jour des données...");
@@ -120,7 +122,7 @@ function getFormsResponse(e) {
       .getRange(rowIndex, getRealColumnIndex("TIRELIRE", "COMMENTAIRE"))
       .setValue(commentaire);
 
-    getTirelire(rowIndex, getRealColumnIndex("TIRELIRE", "PERDU"), calendar);
+    getTirelire(rowIndex, getRealColumnIndex("TIRELIRE", "PERDU"), typeTirelire, calendar);
   } else {
     const pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
     const newDeadline = new Date(
