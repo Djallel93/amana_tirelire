@@ -19,9 +19,10 @@ const SHEET_DEF = {
       CODE_POSTAL: { INDEX: 5, TYPE: "number" },
       VILLE: { INDEX: 6, TYPE: "string" },
       TYPE: { INDEX: 7, TYPE: "string" },
-      DELAIS_RECUPERATION: { INDEX: 8, TYPE: "number" },
-      TELEPHONE: { INDEX: 9, TYPE: "string" },
-      QR_CODE: { INDEX: 10, TYPE: "string" }, // image
+      RESPONSABLE: { INDEX: 8, TYPE: "string" },
+      DELAIS_RECUPERATION: { INDEX: 9, TYPE: "number" },
+      TELEPHONE: { INDEX: 10, TYPE: "string" },
+      QR_CODE: { INDEX: 11, TYPE: "string" }, // image
     },
   },
   TIRELIRE: {
@@ -33,10 +34,11 @@ const SHEET_DEF = {
       MONTANT: { INDEX: 4, TYPE: "number" },
       RECUPERE: { INDEX: 5, TYPE: "boolean" },
       PERDU: { INDEX: 6, TYPE: "boolean" },
-      RESPONSABLE: { INDEX: 7, TYPE: "string" },
-      NOTE: { INDEX: 8, TYPE: "number" },
-      COMMENTAIRE: { INDEX: 9, TYPE: "string" },
-      ID_EVENT: { INDEX: 10, TYPE: "string" },
+      OUVRABLE: { INDEX: 7, TYPE: "boolean" },
+      RESPONSABLE: { INDEX: 8, TYPE: "string" },
+      NOTE: { INDEX: 9, TYPE: "number" },
+      COMMENTAIRE: { INDEX: 10, TYPE: "string" },
+      ID_EVENT: { INDEX: 11, TYPE: "string" },
     },
   },
   QUESTIONS_FORM: {
@@ -46,6 +48,7 @@ const SHEET_DEF = {
     ACTION: "Que voulez vous faire ?",
     ID_MAGASIN: "Quel est l'ID de votre magasin ?",
     RECUPEREE: "Avez vous réussi a récupérer la tirelire",
+    OUVRABLE: "La tirelire que vous vous apprêtez à déposer est-elle ouvrable ?",
     PERDUE_VOLEE: "La tirelire a-t-elle était perdue/volée ?",
     REPROGRAMMER:
       "Souhaitez vous reprogrammer la récupération de votre tirelire ?",
@@ -55,23 +58,6 @@ const SHEET_DEF = {
     NOTE_RECUP: "Comment s'est passé la récupération de la tirelire",
     COMM_RECUP: "Laisser un commentaire ?",
   },
-};
-
-const SHEET_QUESTIONS_FORM = {
-  HORODATEUR: "Horodateur",
-  RECUPEREE: "Avez vous réussi a récupérer la tirelire",
-  PERDUE_VOLEE: "La tirelire a-t-elle était perdue/volée ?",
-  REPROGRAMMER:
-    "Souhaitez vous reprogrammer la récupération de votre tirelire ?",
-  TRANSFERER: "Souhaitez vous transférer la tirelire a un autre frère ?",
-  FRERE_SELECTIONNE: "Voici la liste des frères disponibles",
-  DATE_REPROGRAMMATION: "Pour quand voulez vous reprogrammer votre passage ?",
-  CONTENU_CONNU: "Savez vous combien contenait la tirelire ?",
-  MONTANT_RECUPERE: "Veuillez saisir le montant récupéré",
-  EMAIL: "Adresse e-mail",
-  ID_EVENT: "Quel est l'ID de l'évènement sur Google Calendar ?",
-  NOTE_RECUP: "Comment s'est passé la récupération de la tirelire",
-  COMM_RECUP: "Laisser un commentaire ?",
 };
 
 function getSheetByName(sheetName) {
