@@ -90,7 +90,7 @@ function getFormsResponse(e) {
     console.log("Mise à jour des données...");
 
     const fullName = currentUser.nom + " " + currentUser.prenom;
-    depotTirelire(tirelireSheet, 2, id_magasin, fullName, calendar);
+    depotTirelire(tirelireSheet, 2, id_magasin, fullName, typeTirelire, calendar);
   } else if (!targetRow) {
     console.error("Aucune tirelire n'a été déposée pour ce magasin");
     return;
